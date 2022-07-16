@@ -14,7 +14,7 @@ function Stepper({ count, active }: { count: number; active: number }) {
         }
 
         setSteps(_steps)
-    }, [])
+    }, [active])
     return (
         <Flex m="4" alignItems="center">
             {steps}

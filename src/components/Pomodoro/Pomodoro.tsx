@@ -1,13 +1,13 @@
-import { Box, CircularProgress, CircularProgressLabel, Heading, Icon, IconButton } from '@chakra-ui/react'
-import { useRecoilValue } from 'recoil'
+import { Box, CircularProgress, CircularProgressLabel, Heading, Icon, IconButton, Text } from '@chakra-ui/react'
 
 import { Icons } from '../../constants/icons'
 import { boxShadowMedium, mainButtonStyles } from '../../constants/styles'
-import { timerState } from '../../store/atoms'
+import useTimer from '../../hooks/useTimer'
 import Stepper from '../Stepper/Stepper'
 
 function Pomodoro() {
-    const timer = useRecoilValue(timerState)
+    const { isPaused, schema, order, getPercentage, getFormattedTime, getSessionStatus, toggle } = useTimer()
+
     return (
         <>
             {/* localization */}
@@ -16,22 +16,25 @@ function Pomodoro() {
             </Heading>
 
             <CircularProgress
-                value={timer.percentage}
+                value={getPercentage()}
                 size="240px"
                 thickness="3px"
                 color="brand.700"
                 trackColor="gray.500"
                 capIsRound
             >
-                <CircularProgressLabel color="white">{timer.getFormattedTime()}</CircularProgressLabel>
+                <CircularProgressLabel color="white">
+                    <Text>{getFormattedTime()}</Text>
+                    <Text fontSize="lg">{getSessionStatus()}</Text>
+                </CircularProgressLabel>
             </CircularProgress>
 
             <Box m="2">
-                <Stepper count={timer.schema.longBreakDelay} active={timer.order.pomodoro} />
+                <Stepper count={schema.longBreakDelay} active={order.pomodoro} />
             </Box>
 
             <IconButton
-                icon={<Icon as={!timer.isPaused ? Icons.Pause : Icons.Play} />}
+                icon={<Icon as={!isPaused ? Icons.Pause : Icons.Play} />}
                 aria-label="pause"
                 backgroundColor="brand.500"
                 size="lg"
@@ -43,7 +46,7 @@ function Pomodoro() {
                 w="16"
                 h="16"
                 {...mainButtonStyles}
-                onClick={timer.toggle}
+                onClick={toggle}
             />
         </>
     )

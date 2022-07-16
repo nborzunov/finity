@@ -1,26 +1,39 @@
-import { atom, selector } from 'recoil'
+import { atom } from 'recoil'
 
-import { Timer } from '../services/Timer'
+import { SchemaType, SessionOrderType, SessionType } from '../hooks/useTimer'
 
-export const timerState = atom<Timer>({
-    key: 'timerState',
-    default: Timer.getTimer(),
+export const timerIsPausedState = atom<Boolean>({
+    key: 'timerIsPausedState',
+    default: true,
 })
 
-export const timerClockState = selector({
-    key: 'timerClockState',
-    get: ({ get }) => {
-        const timer = get(timerState)
-
-        return timer.getFormattedTime()
+export const timerOrderState = atom<SessionOrderType>({
+    key: 'timerOrderState',
+    default: {
+        pomodoro: 0,
+        shortBreak: 0,
+        longBreak: 0,
     },
 })
 
-export const timerPercentageState = selector({
-    key: 'timerPercentageState',
-    get: ({ get }) => {
-        const timer = get(timerState)
+export const timerCurrentSessionState = atom<SessionType>({
+    key: 'timerCurrentSessionState',
+    default: 'pomodoro',
+})
 
-        return timer.percentage
+export const timerRemainingSecondsState = atom<number>({
+    key: 'timerRemainingSecondsState',
+    default: 5 * 1,
+})
+
+export const timerSchemaState = atom<SchemaType>({
+    key: 'timerSchemaState',
+    default: {
+        pomodoroDuration: 25,
+        shortBreakDuration: 5,
+        longBreakDuration: 15,
+        longBreakDelay: 4,
+        autoStartPomodoros: true,
+        autoStartBreaks: true,
     },
 })
