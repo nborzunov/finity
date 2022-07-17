@@ -3,11 +3,13 @@ import { Box, CircularProgress, CircularProgressLabel, Heading, Icon, IconButton
 import { Icons } from '../../constants/icons'
 import { boxShadowMedium, mainButtonStyles } from '../../constants/styles'
 import useTimer from '../../hooks/useTimer'
+import useTitle from '../../hooks/useTitle'
 import Stepper from '../Stepper/Stepper'
 
 function Pomodoro() {
     const { isPaused, schema, order, getPercentage, getFormattedTime, getSessionStatus, toggle } = useTimer()
 
+    useTitle(isPaused ? 'Pomodoro timer' : `${getFormattedTime()} - ${getSessionStatus()}`)
     return (
         <>
             {/* localization */}
@@ -15,14 +17,7 @@ function Pomodoro() {
                 Pomodoro timer
             </Heading>
 
-            <CircularProgress
-                value={getPercentage()}
-                size="240px"
-                thickness="3px"
-                color="brand.700"
-                trackColor="gray.500"
-                capIsRound
-            >
+            <CircularProgress value={getPercentage()} size="240px" thickness="3px" color="brand.700" trackColor="gray.500" capIsRound>
                 <CircularProgressLabel color="white">
                     <Text>{getFormattedTime()}</Text>
                     <Text fontSize="lg">{getSessionStatus()}</Text>
@@ -30,7 +25,7 @@ function Pomodoro() {
             </CircularProgress>
 
             <Box m="2">
-                <Stepper count={schema.longBreakDelay} active={order.pomodoro} />
+                <Stepper count={schema.pomodorosGoal} active={order.shortBreak} />
             </Box>
 
             <IconButton

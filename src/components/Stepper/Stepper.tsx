@@ -10,7 +10,7 @@ function Stepper({ count, active }: { count: number; active: number }) {
         let _steps = []
 
         for (let i = 0; i < count; i++) {
-            _steps.push(<Step key={i} isActive={i === active} isLast={i === count - 1} isFilled={i < active} />)
+            _steps.push(<Step key={i} isActive={i === active} isLast={i === count - 1} isFilled={i < active} count={count} />)
         }
 
         setSteps(_steps)

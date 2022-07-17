@@ -15,10 +15,10 @@ export const mainButtonStylesGhost = {
     transition: '0.2s',
     _hover: {
         opacity: '0.7',
-        backgroundColor: 'gray.900',
+        backgroundColor: 'gray.950',
     },
     _active: {
-        backgroundColor: 'gray.900',
+        backgroundColor: 'gray.950',
         color: 'brand.500',
     },
 }

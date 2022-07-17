@@ -1,34 +1,34 @@
 import { Flex, Icon, IconButton } from '@chakra-ui/react'
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
 import { Icons } from '../../constants/icons'
 import { mainButtonStylesGhost } from '../../constants/styles'
 
 function Navigation() {
-    const [activeTab] = useState('pomodoro')
     const icons = [
         {
-            id: 'calendar',
+            id: '/calendar',
             label: 'Calendar',
             icon: Icons.Calendar,
         },
         {
-            id: 'pomodoro',
+            id: '/pomodoro',
             label: 'Pomodoro',
             icon: Icons.Pomodoro,
         },
         {
-            id: 'settings',
+            id: '/settings',
             label: 'Settings',
             icon: Icons.Settings,
         },
         {
-            id: 'profile',
+            id: '/profile',
             label: 'Profile',
             icon: Icons.Profile,
         },
     ]
+
+    const location = useLocation()
     return (
         <Flex justifyContent="space-around" w="100%" mx="8" maxW="320px">
             {icons.map((icon) => {
@@ -37,7 +37,7 @@ function Navigation() {
                         <IconButton
                             icon={<Icon as={icon.icon} />}
                             aria-label={icon.label}
-                            isActive={activeTab === icon.id}
+                            isActive={location.pathname === icon.id}
                             variant="ghost"
                             rounded="full"
                             color="gray.500"

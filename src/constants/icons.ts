@@ -1,4 +1,14 @@
-import { BsCalendarDate, BsClock, BsFillPauseFill, BsFillPersonFill, BsFillPlayFill, BsGearFill } from 'react-icons/bs'
+import {
+    BsCalendarDate,
+    BsClock,
+    BsFillPauseFill,
+    BsFillPencilFill,
+    BsFillPersonFill,
+    BsFillPlayFill,
+    BsFillTrash2Fill,
+    BsGearFill,
+    BsPlusLg,
+} from 'react-icons/bs'
 
 export const Icons = {
     Pause: BsFillPauseFill,
@@ -7,4 +17,7 @@ export const Icons = {
     Pomodoro: BsClock,
     Settings: BsGearFill,
     Profile: BsFillPersonFill,
+    Edit: BsFillPencilFill,
+    Delete: BsFillTrash2Fill,
+    Plus: BsPlusLg,
 }

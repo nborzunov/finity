@@ -1,29 +1,31 @@
 import { useCallback, useEffect, useState } from 'react'
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useResetRecoilState } from 'recoil'
 
+import { formatTime } from '../helpers/formatTime'
 import { getCurrentHookValue } from '../helpers/getCurrentHookValue'
-import {
-    timerCurrentSessionState,
-    timerIsPausedState,
-    timerOrderState,
-    timerRemainingSecondsState,
-    timerSchemaState,
-} from '../store/atoms'
+import { timerCurrentSessionState, timerIsPausedState, timerOrderState, timerRemainingSecondsState, timerSchemaState } from '../store/atoms'
 
 export interface SchemaType {
     pomodoroDuration: number
     shortBreakDuration: number
     longBreakDuration: number
     longBreakDelay: number
+    pomodorosGoal: number
     autoStartPomodoros: boolean
     autoStartBreaks: boolean
 }
 
-export type SessionType = 'pomodoro' | 'shortBreak' | 'longBreak'
-
 export type SessionOrderType = {
     [key in SessionType]: number
 }
+
+export enum SessionType {
+    Pomodoro = 'pomodoro',
+    ShortBreak = 'shortBreak',
+    LongBreak = 'longBreak',
+}
+
+export type SessionTypeUnion = `${SessionType}`
 
 export interface TimerState {
     schema: SchemaType
@@ -48,6 +50,9 @@ function useTimer() {
     const [remainingSeconds, setRemainingSeconds] = useRecoilState(timerRemainingSecondsState)
     const [schema] = useRecoilState(timerSchemaState)
 
+    const resetCurrentSession = useResetRecoilState(timerCurrentSessionState)
+    const resetOrder = useResetRecoilState(timerOrderState)
+    const resetRemainingSeconds = useResetRecoilState(timerRemainingSecondsState)
     const [timer, setTimer] = useState<any>(null)
 
     useEffect(() => {
@@ -94,9 +99,7 @@ function useTimer() {
 
     async function nextSession() {
         const currentSession = await getCurrentHookValue<SessionType>(setCurrentSession)
-
-        const sessionOrder = order[currentSession]
-        const nextSession = getNextSession(sessionOrder, currentSession)
+        const [nextSession, stopTimer] = await getNextSession(currentSession)
 
         setOrder((val) => ({
             ...val,
@@ -104,39 +107,60 @@ function useTimer() {
         }))
         setCurrentSession(nextSession)
         setRemainingSeconds(getSessionDuration(nextSession))
+
+        if (
+            (!schema.autoStartPomodoros && nextSession === 'pomodoro') ||
+            (!schema.autoStartBreaks && nextSession !== 'pomodoro') ||
+            stopTimer
+        ) {
+            setIsPaused(true)
+        }
+        if (stopTimer) {
+            resetCurrentSession()
+            resetOrder()
+            resetRemainingSeconds()
+        }
     }
 
-    function getNextSession(sessionOrder: number, currentSession: string): SessionType {
+    async function getNextSession(currentSession: string): Promise<[SessionType, boolean]> {
+        const order = await getCurrentHookValue<SessionOrderType>(setOrder)
+
         if (currentSession === 'pomodoro') {
-            return sessionOrder !== schema.longBreakDelay ? 'shortBreak' : 'longBreak'
-        } else {
-            return 'pomodoro'
+            if (order.pomodoro < schema.pomodorosGoal - 1) {
+                return [SessionType.ShortBreak, false]
+            } else if (order.pomodoro === schema.longBreakDelay - 1) {
+                return [SessionType.LongBreak, false]
+            } else {
+                return [SessionType.Pomodoro, true]
+            }
         }
+        if (currentSession === 'shortBreak') {
+            return [SessionType.Pomodoro, false]
+        }
+        return [SessionType.Pomodoro, true]
     }
 
     function getSessionDuration(sessionType: SessionType): number {
         switch (sessionType) {
-            case 'pomodoro':
-                return schema.pomodoroDuration * 1
-            case 'shortBreak':
-                return schema.shortBreakDuration * 1
-            case 'longBreak':
-                return schema.longBreakDuration * 1
+            case SessionType.Pomodoro:
+                return 5 || schema.pomodoroDuration * 1
+            case SessionType.ShortBreak:
+                return 5 || schema.shortBreakDuration * 1
+            case SessionType.LongBreak:
+                return 5 || schema.longBreakDuration * 1
         }
     }
     function getFormattedTime(): string {
-        const minutes = Math.floor(remainingSeconds / 60)
-        const seconds = remainingSeconds % 60
-        return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
+        return formatTime(remainingSeconds, 'mm:ss')
     }
 
     function getSessionStatus(): string {
         switch (currentSession) {
-            case 'pomodoro':
+            case SessionType.Pomodoro:
                 return 'Working'
-            case 'shortBreak':
+            case SessionType.ShortBreak:
                 return 'Short Break'
-            case 'longBreak':
+            case SessionType.LongBreak:
                 return 'Long Break'
         }
     }

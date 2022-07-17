@@ -8,6 +8,10 @@ import Pomodoro from './components/Pomodoro/Pomodoro'
 import Settings from './components/Settings/Settings'
 
 const theme = extendTheme({
+    config: {
+        initialColorMode: 'dark',
+        useSystemColorMode: false,
+    },
     colors: {
         brand: {
             300: '#8396df',
@@ -19,6 +23,7 @@ const theme = extendTheme({
         gray: {
             500: '#545068',
             900: '#2C2C3E',
+            950: '#1F1B2E',
         },
         blue: {
             500: '#282fa9',
@@ -32,7 +37,7 @@ function App() {
             <ChakraProvider theme={theme}>
                 <BrowserRouter>
                     <Box
-                        bg="gray.900"
+                        bg="gray.950"
                         h="100vh"
                         alignItems="center"
                         justifyContent="space-between"
@@ -42,9 +47,9 @@ function App() {
                     >
                         <Box alignItems="center" display="flex" flexDirection="column">
                             <Routes>
-                                <Route element={<Navigate to="/pomodoro" replace />} path="/" />
-                                <Route path="/pomodoro" element={<Pomodoro />} />
-                                <Route path="/settings" element={<Settings />} />
+                                <Route element={<Navigate to="pomodoro" replace />} path="/" />
+                                <Route path="pomodoro" element={<Pomodoro />} />
+                                <Route path="settings" element={<Settings />} />
                             </Routes>
                         </Box>
 
