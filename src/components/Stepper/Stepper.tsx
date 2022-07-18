@@ -1,7 +1,6 @@
 import { Flex } from '@chakra-ui/react'
+import Step from 'components/Stepper/Step'
 import { useEffect, useState } from 'react'
-
-import Step from './Step'
 
 function Stepper({ count, active }: { count: number; active: number }) {
     let [steps, setSteps] = useState<any[]>([])

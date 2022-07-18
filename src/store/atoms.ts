@@ -1,9 +1,8 @@
+import { SchemaItem } from 'components/Settings/TimerSettings/TimerSettings'
+import { defaultSchemas, defaultTimer } from 'constants/defaultValues'
+import { SchemaType, SessionOrderType, SessionType } from 'hooks/useTimer'
 import { atom } from 'recoil'
-
-import { SchemaItem } from '../components/Settings/TimerSettings/TimerSettings'
-import { defaultSchemas, defaultTimer } from '../constants/defaultValues'
-import { SchemaType, SessionOrderType, SessionType } from '../hooks/useTimer'
-import { localStorageEffect } from './effects'
+import { localStorageEffect } from 'store/effects'
 
 export const timerIsPausedState = atom<Boolean>({
     key: 'timerIsPausedState',

@@ -1,5 +1,7 @@
 import {
     BsCalendarDate,
+    BsChevronDown,
+    BsChevronUp,
     BsClock,
     BsFillPauseFill,
     BsFillPencilFill,
@@ -20,4 +22,6 @@ export const Icons = {
     Edit: BsFillPencilFill,
     Delete: BsFillTrash2Fill,
     Plus: BsPlusLg,
+    Down: BsChevronDown,
+    Up: BsChevronUp,
 }

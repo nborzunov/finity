@@ -1,9 +1,8 @@
+import { formatTime } from 'helpers/formatTime'
+import { getCurrentHookValue } from 'helpers/getCurrentHookValue'
 import { useCallback, useEffect, useState } from 'react'
 import { useRecoilState, useResetRecoilState } from 'recoil'
-
-import { formatTime } from '../helpers/formatTime'
-import { getCurrentHookValue } from '../helpers/getCurrentHookValue'
-import { timerCurrentSessionState, timerIsPausedState, timerOrderState, timerRemainingSecondsState, timerSchemaState } from '../store/atoms'
+import { timerCurrentSessionState, timerIsPausedState, timerOrderState, timerRemainingSecondsState, timerSchemaState } from 'store/atoms'
 
 export interface SchemaType {
     pomodoroDuration: number

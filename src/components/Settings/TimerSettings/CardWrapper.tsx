@@ -1,30 +1,6 @@
-import { Box, Select as ChakraSelect, Switch, Text } from '@chakra-ui/react'
-
-import { DialogMode } from './SchemaCardDetails'
-
-function Select({ options }: { options: string[] }) {
-    return (
-        <ChakraSelect
-            color="white"
-            bgColor="gray.900"
-            h="59px"
-            borderRadius="full"
-            __css={{
-                'chakra-select': {
-                    color: 'red',
-                },
-                scrollBarWidth: 'none',
-                color: 'red.500',
-            }}
-        >
-            {options.map((option) => (
-                <option key={option} value={option}>
-                    {option}
-                </option>
-            ))}
-        </ChakraSelect>
-    )
-}
+import { Box, Switch, Text } from '@chakra-ui/react'
+import { DialogMode } from 'components/Settings/TimerSettings/SchemaCardDetails'
+import Select, { SelectOption } from 'components/Settings/TimerSettings/Select'
 
 function CardWrapper({
     title,
@@ -32,15 +8,19 @@ function CardWrapper({
     mode,
     isCheckbox,
     options,
+    order,
+    setField,
 }: {
     title: string
     value: string | boolean
     mode: DialogMode
     isCheckbox: boolean
-    options?: string[]
+    setField: (value: number | boolean) => void
+    options?: SelectOption[]
+    order?: number
 }) {
     function isBoolean(value: string | boolean): value is boolean {
-        return isCheckbox
+        return isCheckbox && typeof value === 'boolean'
     }
     return (
         <>
@@ -79,12 +59,23 @@ function CardWrapper({
                         {title}
                     </Text>
 
-                    {isBoolean(value) && (
-                        <Switch id="autoStartPomodoros" isChecked={value} isDisabled={mode === DialogMode.View} size="md" />
-                    )}
+                    <Switch
+                        size="md"
+                        colorScheme="brand"
+                        zIndex={1}
+                        isChecked={value as boolean}
+                        isDisabled={mode === DialogMode.View}
+                        onChange={(event: any) => setField(event.target.checked)}
+                    />
                 </Box>
             )}
-            {mode !== DialogMode.View && <>{!isCheckbox && options && <Select options={options} />}</>}
+            {mode !== DialogMode.View && (
+                <>
+                    {!isCheckbox && !isBoolean(value) && options && (
+                        <Select options={options} title={title} value={value} order={order} setField={setField} />
+                    )}
+                </>
+            )}
         </>
     )
 }

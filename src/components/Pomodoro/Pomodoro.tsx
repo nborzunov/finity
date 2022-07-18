@@ -1,10 +1,9 @@
 import { Box, CircularProgress, CircularProgressLabel, Heading, Icon, IconButton, Text } from '@chakra-ui/react'
-
-import { Icons } from '../../constants/icons'
-import { boxShadowMedium, mainButtonStyles } from '../../constants/styles'
-import useTimer from '../../hooks/useTimer'
-import useTitle from '../../hooks/useTitle'
-import Stepper from '../Stepper/Stepper'
+import Stepper from 'components/Stepper/Stepper'
+import { Icons } from 'constants/icons'
+import { boxShadowMedium, mainButtonStyles } from 'constants/styles'
+import useTimer from 'hooks/useTimer'
+import useTitle from 'hooks/useTitle'
 
 function Pomodoro() {
     const { isPaused, schema, order, getPercentage, getFormattedTime, getSessionStatus, toggle } = useTimer()

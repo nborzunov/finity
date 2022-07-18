@@ -1,5 +1,9 @@
 export function formatTime(seconds: number, format: string): string {
     switch (format) {
+        case 'MM': {
+            const minutes = Math.floor(seconds / 60)
+            return ` ${minutes} minute${minutes === 1 ? '' : 's'}`
+        }
         case 'HH:MM': {
             const hours = Math.floor(seconds / 3600)
             const minutes = Math.floor((seconds % 3600) / 60)

@@ -1,9 +1,8 @@
 import { Box, Icon, IconButton } from '@chakra-ui/react'
+import { SchemaItem } from 'components/Settings/TimerSettings/TimerSettings'
+import { Icons } from 'constants/icons'
+import { formatTime } from 'helpers/formatTime'
 import { IconType } from 'react-icons'
-
-import { Icons } from '../../../constants/icons'
-import { formatTime } from '../../../helpers/formatTime'
-import { SchemaItem } from './TimerSettings'
 
 function GhostIcon({ icon, hoverBg, title, onClick }: { icon: IconType; hoverBg?: string; title: string; onClick: any }) {
     return (
