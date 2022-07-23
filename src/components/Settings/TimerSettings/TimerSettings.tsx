@@ -1,35 +1,33 @@
-import { Box, Button, Heading, Stack, useDisclosure } from '@chakra-ui/react'
+import { Box, Button, Heading, Stack } from '@chakra-ui/react'
 import SettingsHeading from 'components/Settings/SettingsHeading'
 import SchemaCard from 'components/Settings/TimerSettings/SchemaCard'
-import SchemaCardDetails, { DialogMode } from 'components/Settings/TimerSettings/SchemaCardDetails'
+import SchemaDetails, { DialogMode } from 'components/Settings/TimerSettings/SchemaDetails'
+import useSchemaDetailsDialog from 'hooks/useSchemaDetailsDialog'
 import { SchemaType } from 'hooks/useTimer'
-import { useState } from 'react'
-import { createPortal } from 'react-dom'
 import { useRecoilState } from 'recoil'
 import { schemasState } from 'store/atoms'
 
 export interface SchemaItem extends SchemaType {
+    id: string
     title: string
     default: boolean
 }
 
 function TimerSettings() {
     const [schemas] = useRecoilState(schemasState)
-    const { isOpen: isSchemaDetailsOpen, onOpen: onSchemaDetailsOpen, onClose: onSchemaDetailsClose } = useDisclosure()
-    const [schemaDetailsData, setSchemaDetailsData] = useState<{
-        schema?: SchemaItem
-        mode: DialogMode
-    }>()
+
+    const { open } = useSchemaDetailsDialog()
 
     function openDetailsDialog(mode: DialogMode, schema?: SchemaItem) {
-        setSchemaDetailsData({
+        open({
             schema,
-            mode,
+            initialMode: mode,
         })
-        onSchemaDetailsOpen()
     }
+
     return (
         <>
+            <SchemaDetails />
             <SettingsHeading>Timer</SettingsHeading>
 
             <Stack spacing="3">
@@ -52,7 +50,7 @@ function TimerSettings() {
                             bgColor: 'brand.500',
                             color: 'rgba(255, 255, 255, 0.8)',
                         }}
-                        onClick={() => openDetailsDialog(DialogMode.Edit, schema)}
+                        onClick={() => openDetailsDialog(DialogMode.View, schema)}
                     >
                         <Box px="3" alignItems="center" justifyContent="space-between" display="flex" w="100%">
                             <SchemaCard schema={schema} />
@@ -83,10 +81,10 @@ function TimerSettings() {
                 </Button>
             </Stack>
 
-            {isSchemaDetailsOpen
+            {/* {isSchemaDetailsOpen
                 ? createPortal(
                       <>
-                          <SchemaCardDetails
+                          <SchemaDetails
                               isOpen={isSchemaDetailsOpen}
                               onClose={onSchemaDetailsClose}
                               schema={schemaDetailsData?.schema}
@@ -95,7 +93,7 @@ function TimerSettings() {
                       </>,
                       document.body,
                   )
-                : null}
+                : null} */}
         </>
     )
 }

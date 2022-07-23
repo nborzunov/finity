@@ -1,5 +1,7 @@
 import {
     Button,
+    Heading,
+    Input,
     Modal,
     ModalBody,
     ModalCloseButton,
@@ -12,12 +14,13 @@ import {
 } from '@chakra-ui/react'
 import CardWrapper from 'components/Settings/TimerSettings/CardWrapper'
 import { SchemaItem } from 'components/Settings/TimerSettings/TimerSettings'
-import { blankSchema } from 'constants/defaultValues'
 import { boxShadowMedium, mainButtonStyles, mainButtonStylesGhost } from 'constants/styles'
 import ConfirmationDialog, { ConfirmationDialogData } from 'dialogs/ConfirmationDialog'
 import { formatTime } from 'helpers/formatTime'
 import { isEqual } from 'lodash'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { schemaDetailsState, schemasState } from 'store/atoms'
 
 export enum DialogMode {
     Edit = 'edit',
@@ -51,33 +54,22 @@ interface Field {
     isCheckbox?: boolean
 }
 
-function SchemaCardDetails({
-    initialMode,
-    isOpen,
-    onClose,
-    schema,
-}: {
-    initialMode: DialogMode
-    isOpen: boolean
-    onClose: () => void
-    schema: SchemaItem
-}) {
-    const [mode, setMode] = useState(initialMode)
-    const [initialSchema] = useState<SchemaItem>(schema)
-    const [schemaToEdit, setSchemaToEdit] = useState<SchemaItem>(initialSchema)
-    const [confirmationData, setConfirmationData] = useState<ConfirmationDialogData>({})
-    const [fields] = useState(buildFields())
+function SchemaDetails() {
+    const { initialMode, schema, onClose, isOpen } = useRecoilValue(schemaDetailsState)
+    const [mode, setMode] = useState<DialogMode>()
+    const [initialSchema, setInitialSchema] = useState<SchemaItem>()
+    const [schemaToEdit, setSchemaToEdit] = useState<SchemaItem>()
+    const [confirmationData, setConfirmationData] = useState<ConfirmationDialogData>()
+    const [fields, setFields] = useState<Field[]>()
+    const setSchemas = useSetRecoilState(schemasState)
 
     const { isOpen: isOpenConfirm, onOpen: onOpenConfirm, onClose: onCloseConfirm } = useDisclosure()
 
     const ref = useRef<any>()
 
-    console.log('open')
-    useEffect(() => {}, [isOpen])
-
     const setSchemaField = useCallback(
         (field: string) => (value: any) => {
-            setSchemaToEdit((currentSchema) => ({ ...currentSchema, [field]: value }))
+            setSchemaToEdit((currentSchema) => ({ ...currentSchema, [field]: value } as SchemaItem))
         },
         [schemaToEdit],
     )
@@ -85,10 +77,11 @@ function SchemaCardDetails({
     function edit() {
         setMode(DialogMode.Edit)
     }
+
     function save() {
         if (mode === DialogMode.Edit) {
             if (isEqual(schemaToEdit, initialSchema)) {
-                onClose()
+                onClose(true)
                 return
             }
             confirm({
@@ -97,21 +90,26 @@ function SchemaCardDetails({
                 danger: false,
                 onConfirm: (result) => {
                     if (result) {
-                        // TODO: create
-                        onClose()
+                        if (schemaToEdit) {
+                            setSchemas((schemas) => schemas.map((schema) => (schema.title === schemaToEdit.title ? schemaToEdit : schema)))
+                        }
+                        onClose(true)
                         return
                     }
                 },
             })
             return
         }
-
-        // TODO: create new schema
+        // add validation
+        if (schemaToEdit) {
+            setSchemas((schemas) => [...schemas, schemaToEdit])
+            onClose(true)
+        }
     }
 
     function cancel() {
         if (isEqual(schemaToEdit, initialSchema)) {
-            onClose()
+            onClose(false)
             return
         }
         if (mode === DialogMode.Edit) {
@@ -121,7 +119,7 @@ function SchemaCardDetails({
                 additionalText: 'Are you sure you want to discard changes? You will lose all unsaved changes.',
                 onConfirm: (result) => {
                     if (result) {
-                        onClose()
+                        onClose(false)
                         return
                     }
                 },
@@ -135,7 +133,7 @@ function SchemaCardDetails({
                 additionalText: 'Are you sure you want to discard new schema?',
                 onConfirm: (result) => {
                     if (result) {
-                        onClose()
+                        onClose(true)
                         return
                     }
                 },
@@ -146,6 +144,21 @@ function SchemaCardDetails({
     function confirm(data: ConfirmationDialogData) {
         setConfirmationData(data)
         onOpenConfirm()
+    }
+
+    useEffect(() => {
+        if (isOpen === true) {
+            onMount()
+        }
+    }, [isOpen])
+
+    function onMount() {
+        console.log('mount')
+        setMode(initialMode)
+        setInitialSchema(schema)
+        setSchemaToEdit(schema)
+        setConfirmationData({})
+        setFields(buildFields())
     }
 
     function getOptions(type: string) {
@@ -172,7 +185,7 @@ function SchemaCardDetails({
                     value: interval,
                 }))
             case 'longBreakDelay':
-                return getInterval(1, schemaToEdit.pomodorosGoal).map((interval) => ({
+                return getInterval(1, (schemaToEdit as SchemaItem).pomodorosGoal).map((interval) => ({
                     label: formatOptionValue(type, interval),
                     value: interval,
                 }))
@@ -188,7 +201,7 @@ function SchemaCardDetails({
     }
 
     function formatOptionValue(field: Fields, initialValue?: number | string): string {
-        const value = initialValue || schemaToEdit[field] || ''
+        const value = initialValue || (schemaToEdit as SchemaItem)[field] || ''
         switch (field) {
             case 'pomodoroDuration':
             case 'shortBreakDuration':
@@ -240,30 +253,45 @@ function SchemaCardDetails({
         if (!isCheckbox) {
             return formatOptionValue(field)
         }
-        return schemaToEdit[field] as boolean
+        return (schemaToEdit as SchemaItem)[field] as boolean
     }
+
     return (
         <>
             <Modal isOpen={isOpen} onClose={cancel} onOverlayClick={cancel}>
                 <ModalOverlay bg="rgba(0, 0, 0, 0.2)" />
                 <ModalContent bg="gray.950" ref={ref}>
                     {/* TODO: edit/create mode change title */}
-                    <ModalHeader>{schema.title ? `${schema.title} timer` : 'Timer'}</ModalHeader>
+                    <ModalHeader>
+                        {mode === DialogMode.View && <Heading size="md">{`${schema.title} timer`}</Heading>}
+                        {mode !== DialogMode.View && (
+                            <Input
+                                variant="unstyled"
+                                value={schemaToEdit?.title}
+                                placeholder="Enter title.."
+                                onChange={(e) => setSchemaField('title')(e.target.value)}
+                                fontWeight="bold"
+                                fontSize="xl"
+                                lineHeight="1.2"
+                            />
+                        )}
+                    </ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
                         <Stack spacing="3">
-                            {fields.map((field) => (
-                                <CardWrapper
-                                    key={field.key}
-                                    title={field.label}
-                                    value={getValue(field.key, field.isCheckbox)}
-                                    setField={setSchemaField(field.key)}
-                                    mode={mode}
-                                    options={!field.isCheckbox ? getOptions(field.key) : undefined}
-                                    order={field.order}
-                                    isCheckbox={field.isCheckbox}
-                                />
-                            ))}
+                            {mode &&
+                                fields?.map((field) => (
+                                    <CardWrapper
+                                        key={field.key}
+                                        title={field.label}
+                                        value={getValue(field.key, field.isCheckbox)}
+                                        setField={setSchemaField(field.key)}
+                                        mode={mode}
+                                        options={!field.isCheckbox ? getOptions(field.key) : undefined}
+                                        order={field.order}
+                                        isCheckbox={field.isCheckbox}
+                                    />
+                                ))}
                         </Stack>
                     </ModalBody>
 
@@ -348,9 +376,4 @@ function SchemaCardDetails({
     )
 }
 
-SchemaCardDetails.defaultProps = {
-    initialMode: DialogMode.View,
-    schema: blankSchema,
-}
-
-export default SchemaCardDetails
+export default SchemaDetails

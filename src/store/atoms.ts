@@ -1,5 +1,7 @@
+import { DialogMode } from 'components/Settings/TimerSettings/SchemaDetails'
 import { SchemaItem } from 'components/Settings/TimerSettings/TimerSettings'
-import { defaultSchemas, defaultTimer } from 'constants/defaultValues'
+import { defaultSchemas, defaultTimer, getBlankSchema } from 'constants/defaultValues'
+import { SchemaDetailsData } from 'hooks/useSchemaDetailsDialog'
 import { SchemaType, SessionOrderType, SessionType } from 'hooks/useTimer'
 import { atom } from 'recoil'
 import { localStorageEffect } from 'store/effects'
@@ -47,4 +49,14 @@ export const schemasState = atom<SchemaItem[]>({
     key: 'schemasState',
     default: defaultSchemas,
     effects: [localStorageEffect('schemas')],
+})
+
+export const schemaDetailsState = atom<SchemaDetailsData>({
+    key: 'schemaDetailsState',
+    default: {
+        isOpen: false,
+        onClose: () => {},
+        initialMode: DialogMode.View,
+        schema: getBlankSchema(),
+    },
 })

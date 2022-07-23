@@ -1,3 +1,5 @@
+import { nanoid } from 'nanoid'
+
 export const defaultTimer = {
     pomodoroDuration: 25,
     shortBreakDuration: 5,
@@ -8,13 +10,16 @@ export const defaultTimer = {
     autoStartBreaks: true,
 }
 
-export const blankSchema = {
+export const getBlankSchema = () => ({
+    id: nanoid(6),
     title: '',
+    default: false,
     ...defaultTimer,
-}
+})
 
 export const defaultSchemas = [
     {
+        id: 'classic',
         title: 'Classic',
         default: true,
         pomodoroDuration: 25,
@@ -26,6 +31,7 @@ export const defaultSchemas = [
         autoStartBreaks: true,
     },
     {
+        id: 'personal',
         title: 'Personal',
         default: true,
         pomodoroDuration: 30,
@@ -37,6 +43,7 @@ export const defaultSchemas = [
         autoStartBreaks: true,
     },
     {
+        id: 'work',
         title: 'Work',
         default: true,
         pomodoroDuration: 50,

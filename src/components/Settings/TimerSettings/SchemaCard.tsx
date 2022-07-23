@@ -1,8 +1,15 @@
-import { Box, Icon, IconButton } from '@chakra-ui/react'
+import { Box, Icon, IconButton, useDisclosure } from '@chakra-ui/react'
 import { SchemaItem } from 'components/Settings/TimerSettings/TimerSettings'
 import { Icons } from 'constants/icons'
+import ConfirmationDialog, { ConfirmationDialogData } from 'dialogs/ConfirmationDialog'
 import { formatTime } from 'helpers/formatTime'
+import useSchemaDetailsDialog from 'hooks/useSchemaDetailsDialog'
+import { useState } from 'react'
 import { IconType } from 'react-icons'
+import { useSetRecoilState } from 'recoil'
+import { schemasState } from 'store/atoms'
+
+import { DialogMode } from './SchemaDetails'
 
 function GhostIcon({ icon, hoverBg, title, onClick }: { icon: IconType; hoverBg?: string; title: string; onClick: any }) {
     return (
@@ -30,6 +37,13 @@ GhostIcon.defaultProps = {
 }
 
 function SchemaCard({ schema }: { schema: SchemaItem }) {
+    const setSchemas = useSetRecoilState(schemasState)
+    const [confirmationData, setConfirmationData] = useState<ConfirmationDialogData>()
+
+    const { isOpen: isOpenConfirm, onOpen: onOpenConfirm, onClose: onCloseConfirm } = useDisclosure()
+
+    const { open } = useSchemaDetailsDialog()
+
     function calculateSchemaDuration(schema: SchemaItem) {
         const pomodorosDuration = schema.pomodorosGoal * schema.pomodoroDuration * 60
         const shortBreaksDuration = schema.pomodorosGoal * schema.shortBreakDuration * 60
@@ -40,14 +54,37 @@ function SchemaCard({ schema }: { schema: SchemaItem }) {
     function getFormattedTime(seconds: number) {
         return formatTime(seconds, 'hh:mm')
     }
+
+    function deleteSchema(event: MouseEvent, id: string) {
+        event.stopPropagation()
+        setConfirmationData({
+            title: 'Delete schema',
+            actionTitle: 'Delete',
+            danger: true,
+            additionalText: 'Are you sure you want to delete this schema?',
+            onConfirm: () => {
+                setSchemas((schemas) => schemas.filter((schema) => schema.id !== id))
+            },
+        })
+        onOpenConfirm()
+    }
+
+    function editSchema(event: MouseEvent) {
+        event.stopPropagation()
+        open({
+            schema,
+            initialMode: DialogMode.Edit,
+        })
+    }
     return (
         <>
+            <ConfirmationDialog isOpen={isOpenConfirm} onClose={onCloseConfirm} {...confirmationData} />
             <Box>
                 <b>{schema.title}</b> - {getFormattedTime(calculateSchemaDuration(schema))}
             </Box>
             <Box display="flex" gap="4px">
-                <GhostIcon icon={Icons.Edit} title="Edit" onClick={(event: any) => event.stopPropagation()} />
-                <GhostIcon icon={Icons.Delete} hoverBg="red.500" title="Delete" onClick={(event: any) => event.stopPropagation()} />
+                <GhostIcon icon={Icons.Edit} hoverBg="blue.500" title="Edit" onClick={(event: any) => editSchema(event)} />
+                <GhostIcon icon={Icons.Delete} hoverBg="red.500" title="Delete" onClick={(event: any) => deleteSchema(event, schema.id)} />
             </Box>
         </>
     )
