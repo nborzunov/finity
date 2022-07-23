@@ -69,6 +69,10 @@ function useTimer() {
     const [timer, setTimer] = useState<any>(null)
 
     useEffect(() => {
+        if (remainingSeconds === -1) {
+            updateRemainingSecinds()
+        }
+
         getTimer()
 
         if (timerSchemaChanged) {
@@ -80,7 +84,13 @@ function useTimer() {
         }
     }, [isPaused, timerSchemaChanged])
 
-    const getTimer = useCallback(() => {
+    async function updateRemainingSecinds() {
+        const currentSession = await getCurrentHookValue<SessionType>(setCurrentSession)
+        const duration = getSessionDuration(currentSession)
+        setRemainingSeconds(duration)
+    }
+
+    const getTimer = useCallback(async () => {
         if (timer && isPaused) {
             clearInterval(timer)
             setTimer(null)
@@ -167,11 +177,11 @@ function useTimer() {
     function getSessionDuration(sessionType: SessionType): number {
         switch (sessionType) {
             case SessionType.Pomodoro:
-                return 5 || schema.pomodoroDuration * 1
+                return schema.pomodoroDuration * 60
             case SessionType.ShortBreak:
-                return 5 || schema.shortBreakDuration * 1
+                return schema.shortBreakDuration * 60
             case SessionType.LongBreak:
-                return 5 || schema.longBreakDuration * 1
+                return schema.longBreakDuration * 60
         }
     }
     function getFormattedTime(): string {

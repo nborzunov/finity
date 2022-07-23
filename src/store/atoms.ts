@@ -30,7 +30,7 @@ export const timerCurrentSessionState = atom<SessionType>({
 
 export const timerRemainingSecondsState = atom<number>({
     key: 'timerRemainingSecondsState',
-    default: 1,
+    default: -1,
     effects: [localStorageEffect('remaining_seconds')],
 })
 

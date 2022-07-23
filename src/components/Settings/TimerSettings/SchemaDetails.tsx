@@ -94,6 +94,7 @@ function SchemaDetails() {
                     if (result) {
                         if (schemaToEdit) {
                             setSchemas((schemas) => schemas.map((schema) => (schema.title === schemaToEdit.title ? schemaToEdit : schema)))
+                            setTimerSchemaChanged(true)
                         }
                         onClose(true)
                         return

@@ -29,7 +29,7 @@ function AppearanceSettings() {
         }
     }
     return (
-        <Box width="100%" maxWidth="400px">
+        <Box width="100%" maxWidth="300px">
             <SettingsHeading>Appearance</SettingsHeading>
 
             <Stack spacing="4">

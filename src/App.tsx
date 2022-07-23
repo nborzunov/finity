@@ -50,7 +50,14 @@ function App() {
                         flexDirection="column"
                         py="4"
                     >
-                        <Box alignItems="center" display="flex" flexDirection="column">
+                        <Box
+                            alignItems="center"
+                            display="flex"
+                            flexDirection="column"
+                            maxHeight="calc(100vh - 100px)"
+                            overflowY="auto"
+                            overflowX="hidden"
+                        >
                             <Routes>
                                 <Route element={<Navigate to="pomodoro" replace />} path="/" />
                                 <Route path="pomodoro" element={<Pomodoro />} />
