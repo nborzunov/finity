@@ -13,7 +13,7 @@ function CardWrapper({
 }: {
     title: string
     value: string | boolean
-    mode: DialogMode
+    mode?: DialogMode
     isCheckbox: boolean
     setField: (value: number | boolean) => void
     options?: SelectOption[]
@@ -82,6 +82,7 @@ function CardWrapper({
 
 CardWrapper.defaultProps = {
     isCheckbox: false,
+    mode: 'edit',
 }
 
 export default CardWrapper

@@ -8,6 +8,7 @@ import {
     BsFillPersonFill,
     BsFillPlayFill,
     BsFillTrash2Fill,
+    BsFillVolumeUpFill,
     BsGearFill,
     BsPlusLg,
 } from 'react-icons/bs'
@@ -24,4 +25,5 @@ export const Icons = {
     Plus: BsPlusLg,
     Down: BsChevronDown,
     Up: BsChevronUp,
+    Volume: BsFillVolumeUpFill,
 }

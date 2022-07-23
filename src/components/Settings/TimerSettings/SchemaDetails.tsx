@@ -20,7 +20,7 @@ import { formatTime } from 'helpers/formatTime'
 import { isEqual } from 'lodash'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
-import { schemaDetailsState, schemasState } from 'store/atoms'
+import { schemaDetailsState, schemasState, timerSchemaChangedState, timerSchemaState } from 'store/atoms'
 
 export enum DialogMode {
     Edit = 'edit',
@@ -62,6 +62,8 @@ function SchemaDetails() {
     const [confirmationData, setConfirmationData] = useState<ConfirmationDialogData>()
     const [fields, setFields] = useState<Field[]>()
     const setSchemas = useSetRecoilState(schemasState)
+    const setSelectedSchema = useSetRecoilState(timerSchemaState)
+    const setTimerSchemaChanged = useSetRecoilState(timerSchemaChangedState)
 
     const { isOpen: isOpenConfirm, onOpen: onOpenConfirm, onClose: onCloseConfirm } = useDisclosure()
 
@@ -103,6 +105,7 @@ function SchemaDetails() {
         // add validation
         if (schemaToEdit) {
             setSchemas((schemas) => [...schemas, schemaToEdit])
+            choose()
             onClose(true)
         }
     }
@@ -146,6 +149,14 @@ function SchemaDetails() {
         onOpenConfirm()
     }
 
+    function choose() {
+        if (schemaToEdit) {
+            setSelectedSchema(schemaToEdit)
+            setTimerSchemaChanged(true)
+        }
+        cancel()
+    }
+
     useEffect(() => {
         if (isOpen === true) {
             onMount()
@@ -153,7 +164,6 @@ function SchemaDetails() {
     }, [isOpen])
 
     function onMount() {
-        console.log('mount')
         setMode(initialMode)
         setInitialSchema(schema)
         setSchemaToEdit(schema)
@@ -295,24 +305,40 @@ function SchemaDetails() {
                         </Stack>
                     </ModalBody>
 
-                    <ModalFooter display="flex" justifyContent={mode === DialogMode.View ? 'flex-end' : 'space-between'}>
+                    <ModalFooter display="flex" justifyContent="space-between">
                         {mode === DialogMode.View && (
-                            <Button
-                                backgroundColor="brand.500"
-                                size="lg"
-                                rounded="full"
-                                mx="4"
-                                color="white"
-                                fontSize="lg"
-                                px="8"
-                                width="50%"
-                                boxShadow={boxShadowMedium}
-                                {...mainButtonStyles}
-                                onClick={() => edit()}
-                                maxWidth="168px"
-                            >
-                                Edit
-                            </Button>
+                            <>
+                                <Button
+                                    size="lg"
+                                    rounded="full"
+                                    mx="4"
+                                    color="white"
+                                    fontSize="lg"
+                                    px="8"
+                                    width="50%"
+                                    backgroundColor="transparent"
+                                    {...mainButtonStylesGhost}
+                                    onClick={() => choose()}
+                                >
+                                    Choose
+                                </Button>
+                                <Button
+                                    backgroundColor="brand.500"
+                                    size="lg"
+                                    rounded="full"
+                                    mx="4"
+                                    color="white"
+                                    fontSize="lg"
+                                    px="8"
+                                    width="50%"
+                                    boxShadow={boxShadowMedium}
+                                    {...mainButtonStyles}
+                                    onClick={() => edit()}
+                                    maxWidth="168px"
+                                >
+                                    Edit
+                                </Button>
+                            </>
                         )}
                         {mode !== DialogMode.View && (
                             <>

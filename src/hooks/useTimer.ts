@@ -1,8 +1,18 @@
+import { SchemaItem } from 'components/Settings/TimerSettings/TimerSettings'
+import { alarmsList } from 'constants/constants'
 import { formatTime } from 'helpers/formatTime'
 import { getCurrentHookValue } from 'helpers/getCurrentHookValue'
 import { useCallback, useEffect, useState } from 'react'
-import { useRecoilState, useResetRecoilState } from 'recoil'
-import { timerCurrentSessionState, timerIsPausedState, timerOrderState, timerRemainingSecondsState, timerSchemaState } from 'store/atoms'
+import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil'
+import {
+    timerCurrentSessionState,
+    timerIsPausedState,
+    timerOrderState,
+    timerRemainingSecondsState,
+    timerSchemaChangedState,
+    timerSchemaState,
+    userSettingsState,
+} from 'store/atoms'
 
 export interface SchemaType {
     pomodoroDuration: number
@@ -27,7 +37,7 @@ export enum SessionType {
 export type SessionTypeUnion = `${SessionType}`
 
 export interface TimerState {
-    schema: SchemaType
+    schema: SchemaItem
     currentSession: SessionType
     order: SessionOrderType
     remainingSeconds?: number
@@ -47,20 +57,28 @@ function useTimer() {
     const [currentSession, setCurrentSession] = useRecoilState(timerCurrentSessionState)
     const [order, setOrder] = useRecoilState(timerOrderState)
     const [remainingSeconds, setRemainingSeconds] = useRecoilState(timerRemainingSecondsState)
-    const [schema] = useRecoilState(timerSchemaState)
+    const [timerSchemaChanged, setTimerSchemaChanged] = useRecoilState(timerSchemaChangedState)
+
+    const schema = useRecoilValue(timerSchemaState)
+    const userSettings = useRecoilValue(userSettingsState)
 
     const resetCurrentSession = useResetRecoilState(timerCurrentSessionState)
     const resetOrder = useResetRecoilState(timerOrderState)
     const resetRemainingSeconds = useResetRecoilState(timerRemainingSecondsState)
+
     const [timer, setTimer] = useState<any>(null)
 
     useEffect(() => {
         getTimer()
 
+        if (timerSchemaChanged) {
+            reset()
+            setTimerSchemaChanged(false)
+        }
         return () => {
             clearInterval(timer)
         }
-    }, [isPaused])
+    }, [isPaused, timerSchemaChanged])
 
     const getTimer = useCallback(() => {
         if (timer && isPaused) {
@@ -114,11 +132,18 @@ function useTimer() {
         ) {
             setIsPaused(true)
         }
+
+        notify()
+
         if (stopTimer) {
-            resetCurrentSession()
-            resetOrder()
-            resetRemainingSeconds()
+            resetTimer()
         }
+    }
+
+    function resetTimer() {
+        resetCurrentSession()
+        resetOrder()
+        resetRemainingSeconds()
     }
 
     async function getNextSession(currentSession: string): Promise<[SessionType, boolean]> {
@@ -162,6 +187,25 @@ function useTimer() {
             case SessionType.LongBreak:
                 return 'Long Break'
         }
+    }
+    function notify() {
+        if (!userSettings.playAlarmSound) {
+            return
+        }
+        const alarm = alarmsList.find((alarm) => alarm.id === userSettings.alarm)
+
+        if (!alarm) {
+            return
+        }
+        const audio = new Audio(alarm.url)
+
+        audio.volume = userSettings.volume
+
+        audio.play()
+    }
+
+    function reset() {
+        resetTimer()
     }
     return {
         isPaused,

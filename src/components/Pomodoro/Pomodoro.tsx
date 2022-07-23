@@ -4,16 +4,19 @@ import { Icons } from 'constants/icons'
 import { boxShadowMedium, mainButtonStyles } from 'constants/styles'
 import useTimer from 'hooks/useTimer'
 import useTitle from 'hooks/useTitle'
+import { useRecoilValue } from 'recoil'
+import { timerSchemaState } from 'store/atoms'
 
 function Pomodoro() {
     const { isPaused, schema, order, getPercentage, getFormattedTime, getSessionStatus, toggle } = useTimer()
+    const selectedSchema = useRecoilValue(timerSchemaState)
 
     useTitle(isPaused ? 'Pomodoro timer' : `${getFormattedTime()} - ${getSessionStatus()}`)
     return (
         <>
             {/* localization */}
             <Heading color="white" textAlign="center" pt="4" pb="8" fontSize="xl">
-                Pomodoro timer
+                {selectedSchema.title + ' timer'}
             </Heading>
 
             <CircularProgress value={getPercentage()} size="240px" thickness="3px" color="brand.700" trackColor="gray.500" capIsRound>

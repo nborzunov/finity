@@ -4,8 +4,8 @@ import SchemaCard from 'components/Settings/TimerSettings/SchemaCard'
 import SchemaDetails, { DialogMode } from 'components/Settings/TimerSettings/SchemaDetails'
 import useSchemaDetailsDialog from 'hooks/useSchemaDetailsDialog'
 import { SchemaType } from 'hooks/useTimer'
-import { useRecoilState } from 'recoil'
-import { schemasState } from 'store/atoms'
+import { useRecoilState, useRecoilValue } from 'recoil'
+import { schemasState, timerSchemaState } from 'store/atoms'
 
 export interface SchemaItem extends SchemaType {
     id: string
@@ -24,9 +24,10 @@ function TimerSettings() {
             initialMode: mode,
         })
     }
+    const selectedSchema = useRecoilValue(timerSchemaState)
 
     return (
-        <>
+        <Box w="300px">
             <SchemaDetails />
             <SettingsHeading>Timer</SettingsHeading>
 
@@ -35,7 +36,7 @@ function TimerSettings() {
                     <Button
                         key={index}
                         color="white"
-                        bgColor="brand.500"
+                        bgColor={selectedSchema.id !== schema.id ? 'brand.500' : 'brand.400'}
                         p="3"
                         borderRadius="full"
                         h="64px"
@@ -43,11 +44,11 @@ function TimerSettings() {
                         justifyContent="space-between"
                         display="flex"
                         _hover={{
-                            bgColor: 'brand.500',
+                            bgColor: selectedSchema.id !== schema.id ? 'brand.500' : 'brand.400',
                             opacity: 0.8,
                         }}
                         _focus={{
-                            bgColor: 'brand.500',
+                            bgColor: selectedSchema.id !== schema.id ? 'brand.500' : 'brand.400',
                             color: 'rgba(255, 255, 255, 0.8)',
                         }}
                         onClick={() => openDetailsDialog(DialogMode.View, schema)}
@@ -80,21 +81,7 @@ function TimerSettings() {
                     <Heading size="md">New schema</Heading>
                 </Button>
             </Stack>
-
-            {/* {isSchemaDetailsOpen
-                ? createPortal(
-                      <>
-                          <SchemaDetails
-                              isOpen={isSchemaDetailsOpen}
-                              onClose={onSchemaDetailsClose}
-                              schema={schemaDetailsData?.schema}
-                              initialMode={schemaDetailsData?.mode}
-                          />
-                      </>,
-                      document.body,
-                  )
-                : null} */}
-        </>
+        </Box>
     )
 }
 

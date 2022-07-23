@@ -1,6 +1,9 @@
 import { nanoid } from 'nanoid'
 
-export const defaultTimer = {
+export const getBlankSchema = () => ({
+    id: nanoid(6),
+    title: '',
+    default: false,
     pomodoroDuration: 25,
     shortBreakDuration: 5,
     longBreakDuration: 15,
@@ -8,13 +11,6 @@ export const defaultTimer = {
     pomodorosGoal: 8,
     autoStartPomodoros: true,
     autoStartBreaks: true,
-}
-
-export const getBlankSchema = () => ({
-    id: nanoid(6),
-    title: '',
-    default: false,
-    ...defaultTimer,
 })
 
 export const defaultSchemas = [

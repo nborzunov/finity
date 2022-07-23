@@ -1,8 +1,9 @@
 import { DialogMode } from 'components/Settings/TimerSettings/SchemaDetails'
 import { SchemaItem } from 'components/Settings/TimerSettings/TimerSettings'
-import { defaultSchemas, defaultTimer, getBlankSchema } from 'constants/defaultValues'
+import { defaultSchemas, getBlankSchema } from 'constants/defaultValues'
+import { UserSettings } from 'constants/types'
 import { SchemaDetailsData } from 'hooks/useSchemaDetailsDialog'
-import { SchemaType, SessionOrderType, SessionType } from 'hooks/useTimer'
+import { SessionOrderType, SessionType } from 'hooks/useTimer'
 import { atom } from 'recoil'
 import { localStorageEffect } from 'store/effects'
 
@@ -33,10 +34,16 @@ export const timerRemainingSecondsState = atom<number>({
     effects: [localStorageEffect('remaining_seconds')],
 })
 
-export const timerSchemaState = atom<SchemaType>({
+export const timerSchemaState = atom<SchemaItem>({
     key: 'timerSchemaState',
-    default: defaultTimer,
+    default: defaultSchemas[0],
     effects: [localStorageEffect('timer_schema')],
+})
+
+export const timerSchemaChangedState = atom<boolean>({
+    key: 'timerSchemaChangedState',
+    default: false,
+    effects: [localStorageEffect('timer_schema_changed')],
 })
 
 export const showNotificationsState = atom<boolean>({
@@ -59,4 +66,16 @@ export const schemaDetailsState = atom<SchemaDetailsData>({
         initialMode: DialogMode.View,
         schema: getBlankSchema(),
     },
+})
+
+export const userSettingsState = atom<UserSettings>({
+    key: 'userSettingsState',
+    default: {
+        volume: 1,
+        alarm: 'bell_1',
+        playAlarmSound: true,
+        colorTheme: 'dark',
+        language: 'en',
+    },
+    effects: [localStorageEffect('user_settings')],
 })
