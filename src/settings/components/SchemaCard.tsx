@@ -1,15 +1,15 @@
 import { Box, Icon, IconButton, useDisclosure } from '@chakra-ui/react'
-import { SchemaItem } from 'components/Settings/TimerSettings/TimerSettings'
-import { Icons } from 'constants/icons'
-import ConfirmationDialog, { ConfirmationDialogData } from 'dialogs/ConfirmationDialog'
-import { formatTime } from 'helpers/formatTime'
-import useSchemaDetailsDialog from 'hooks/useSchemaDetailsDialog'
 import { useState } from 'react'
 import { IconType } from 'react-icons'
 import { useSetRecoilState } from 'recoil'
+import useSchemaDetailsDialog from 'settings/hooks/useSchemaDetailsDialog'
+import { SchemaItem } from 'settings/types'
+import { DialogMode } from 'shared/constants/constants'
+import { Icons } from 'shared/constants/icons'
+import ConfirmationDialog from 'shared/dialogs/ConfirmationDialog'
+import { formatTime } from 'shared/helpers/formatTime'
+import { ConfirmationDialogData } from 'shared/types'
 import { schemasState } from 'store/atoms'
-
-import { DialogMode } from './SchemaDetails'
 
 function GhostIcon({ icon, hoverBg, title, onClick }: { icon: IconType; hoverBg?: string; title: string; onClick: any }) {
     return (

@@ -1,10 +1,10 @@
 import { Box, CircularProgress, CircularProgressLabel, Heading, Icon, IconButton, Text } from '@chakra-ui/react'
-import Stepper from 'components/Stepper/Stepper'
-import { Icons } from 'constants/icons'
-import { boxShadowMedium, mainButtonStyles } from 'constants/styles'
-import useTimer from 'hooks/useTimer'
-import useTitle from 'hooks/useTitle'
+import Stepper from 'pomodoro/components/Stepper'
+import useTimer from 'pomodoro/hooks/useTimer'
 import { useRecoilValue } from 'recoil'
+import { Icons } from 'shared/constants/icons'
+import { boxShadowMedium, mainButtonStyles } from 'shared/constants/styles'
+import useTitle from 'shared/hooks/useTitle'
 import { timerSchemaState } from 'store/atoms'
 
 function Pomodoro() {
@@ -30,6 +30,7 @@ function Pomodoro() {
                 <Stepper count={schema.pomodorosGoal} active={order.shortBreak} />
             </Box>
 
+            {/* TODO: buttons: reset timer and go back to prev */}
             <IconButton
                 icon={<Icon as={!isPaused ? Icons.Pause : Icons.Play} />}
                 aria-label="pause"

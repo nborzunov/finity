@@ -1,11 +1,7 @@
 import { Box, Flex, Icon, Text, useDisclosure, useOutsideClick } from '@chakra-ui/react'
-import { Icons } from 'constants/icons'
 import { useRef } from 'react'
-
-export interface SelectOption {
-    label: string
-    value: string | number | boolean
-}
+import { SelectOption } from 'settings/types'
+import { Icons } from 'shared/constants/icons'
 
 function Select({
     order,

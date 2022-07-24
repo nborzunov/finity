@@ -1,10 +1,10 @@
 import { Box } from '@chakra-ui/react'
 import { ChakraProvider, extendTheme } from '@chakra-ui/react'
-import Navigation from 'components/Navigation/Navigation'
-import Pomodoro from 'components/Pomodoro/Pomodoro'
-import Settings from 'components/Settings/Settings'
+import Pomodoro from 'pomodoro/components/Pomodoro'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { RecoilRoot } from 'recoil'
+import Settings from 'settings/components/Settings'
+import Navigation from 'shared/components/Navigation'
 
 const theme = extendTheme({
     config: {

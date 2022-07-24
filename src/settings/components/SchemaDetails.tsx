@@ -12,47 +12,18 @@ import {
     Stack,
     useDisclosure,
 } from '@chakra-ui/react'
-import CardWrapper from 'components/Settings/TimerSettings/CardWrapper'
-import { SchemaItem } from 'components/Settings/TimerSettings/TimerSettings'
-import { boxShadowMedium, mainButtonStyles, mainButtonStylesGhost } from 'constants/styles'
-import ConfirmationDialog, { ConfirmationDialogData } from 'dialogs/ConfirmationDialog'
-import { formatTime } from 'helpers/formatTime'
 import { isEqual } from 'lodash'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
+import CardWrapper from 'settings/components/CardWrapper'
+import { FieldLabels } from 'settings/constants'
+import { Field, Fields, SchemaItem } from 'settings/types'
+import { DialogMode } from 'shared/constants/constants'
+import { boxShadowMedium, mainButtonStyles, mainButtonStylesGhost } from 'shared/constants/styles'
+import ConfirmationDialog from 'shared/dialogs/ConfirmationDialog'
+import { formatTime } from 'shared/helpers/formatTime'
+import { ConfirmationDialogData } from 'shared/types'
 import { schemaDetailsState, schemasState, timerSchemaChangedState, timerSchemaState } from 'store/atoms'
-
-export enum DialogMode {
-    Edit = 'edit',
-    Create = 'create',
-    View = 'view',
-}
-
-enum FieldLabels {
-    pomodoroDuration = 'Focus time',
-    shortBreakDuration = 'Short break',
-    longBreakDuration = 'Long break',
-    pomodorosGoal = 'Pomodoros goal',
-    longBreakDelay = 'Long break delay',
-    autoStartPomodoros = 'Auto start pomodoros',
-    autoStartBreaks = 'Auto start breaks',
-}
-
-type Fields =
-    | 'pomodoroDuration'
-    | 'shortBreakDuration'
-    | 'longBreakDuration'
-    | 'pomodorosGoal'
-    | 'longBreakDelay'
-    | 'autoStartPomodoros'
-    | 'autoStartBreaks'
-
-interface Field {
-    key: Fields
-    label: FieldLabels
-    order?: number
-    isCheckbox?: boolean
-}
 
 function SchemaDetails() {
     const { initialMode, schema, onClose, isOpen } = useRecoilValue(schemaDetailsState)

@@ -1,10 +1,9 @@
-import { DialogMode } from 'components/Settings/TimerSettings/SchemaDetails'
-import { SchemaItem } from 'components/Settings/TimerSettings/TimerSettings'
-import { defaultSchemas, getBlankSchema } from 'constants/defaultValues'
-import { UserSettings } from 'constants/types'
-import { SchemaDetailsData } from 'hooks/useSchemaDetailsDialog'
-import { SessionOrderType, SessionType } from 'hooks/useTimer'
+import { SessionType } from 'pomodoro/constants'
+import { SessionOrderType } from 'pomodoro/types'
 import { atom } from 'recoil'
+import { SchemaDetailsData, SchemaItem, UserSettings } from 'settings/types'
+import { DialogMode } from 'shared/constants/constants'
+import { defaultSchemas, getBlankSchema } from 'shared/constants/defaultValues'
 import { localStorageEffect } from 'store/effects'
 
 export const timerIsPausedState = atom<Boolean>({
@@ -44,12 +43,6 @@ export const timerSchemaChangedState = atom<boolean>({
     key: 'timerSchemaChangedState',
     default: false,
     effects: [localStorageEffect('timer_schema_changed')],
-})
-
-export const showNotificationsState = atom<boolean>({
-    key: 'showNotificationsState',
-    default: true,
-    effects: [localStorageEffect('show_notifications')],
 })
 
 export const schemasState = atom<SchemaItem[]>({

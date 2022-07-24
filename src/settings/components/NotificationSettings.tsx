@@ -1,12 +1,11 @@
 import { Box, Select, Stack, Switch } from '@chakra-ui/react'
-import Slider from 'components/Settings/NotificationSettings/Slider'
-import SettingsHeading from 'components/Settings/SettingsHeading'
-import { alarmsList } from 'constants/constants'
 import { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
+import Label from 'settings/components/Label'
+import SettingsHeading from 'settings/components/SettingsHeading'
+import Slider from 'settings/components/Slider'
+import { alarmsList } from 'settings/constants'
 import { userSettingsState } from 'store/atoms'
-
-import Label from '../Label'
 
 function NotificationSettings() {
     const [userSettings, setUserSettings] = useRecoilState(userSettingsState)

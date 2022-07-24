@@ -1,3 +1,13 @@
+export enum FieldLabels {
+    pomodoroDuration = 'Focus time',
+    shortBreakDuration = 'Short break',
+    longBreakDuration = 'Long break',
+    pomodorosGoal = 'Pomodoros goal',
+    longBreakDelay = 'Long break delay',
+    autoStartPomodoros = 'Auto start pomodoros',
+    autoStartBreaks = 'Auto start breaks',
+}
+
 export const alarmsList = [
     {
         id: 'knock',

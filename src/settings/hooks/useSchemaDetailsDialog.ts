@@ -1,15 +1,7 @@
 import { useDisclosure } from '@chakra-ui/react'
-import { DialogMode } from 'components/Settings/TimerSettings/SchemaDetails'
-import { SchemaItem } from 'components/Settings/TimerSettings/TimerSettings'
-import { DialogData } from 'constants/types'
 import { useRecoilState, useResetRecoilState } from 'recoil'
+import { SchemaDetailsInitialData } from 'settings/types'
 import { schemaDetailsState } from 'store/atoms'
-
-export interface SchemaDetailsInitialData {
-    initialMode: DialogMode
-    schema: SchemaItem
-}
-export type SchemaDetailsData = SchemaDetailsInitialData & DialogData<boolean>
 
 function useSchemaDetailsDialog() {
     const { isOpen, onOpen, onClose } = useDisclosure()

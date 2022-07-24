@@ -1,9 +1,10 @@
-import { SchemaItem } from 'components/Settings/TimerSettings/TimerSettings'
-import { alarmsList } from 'constants/constants'
-import { formatTime } from 'helpers/formatTime'
-import { getCurrentHookValue } from 'helpers/getCurrentHookValue'
+import { SessionType } from 'pomodoro/constants'
+import { SessionOrderType, TimerState } from 'pomodoro/types'
 import { useCallback, useEffect, useState } from 'react'
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil'
+import { alarmsList } from 'settings/constants'
+import { formatTime } from 'shared/helpers/formatTime'
+import { getCurrentHookValue } from 'shared/helpers/getCurrentHookValue'
 import {
     timerCurrentSessionState,
     timerIsPausedState,
@@ -13,35 +14,6 @@ import {
     timerSchemaState,
     userSettingsState,
 } from 'store/atoms'
-
-export interface SchemaType {
-    pomodoroDuration: number
-    shortBreakDuration: number
-    longBreakDuration: number
-    longBreakDelay: number
-    pomodorosGoal: number
-    autoStartPomodoros: boolean
-    autoStartBreaks: boolean
-}
-
-export type SessionOrderType = {
-    [key in SessionType]: number
-}
-
-export enum SessionType {
-    Pomodoro = 'pomodoro',
-    ShortBreak = 'shortBreak',
-    LongBreak = 'longBreak',
-}
-
-export type SessionTypeUnion = `${SessionType}`
-
-export interface TimerState {
-    schema: SchemaItem
-    currentSession: SessionType
-    order: SessionOrderType
-    remainingSeconds?: number
-}
 
 export function getTimerState(): TimerState | null {
     const storedTimer = localStorage.getItem('timer')

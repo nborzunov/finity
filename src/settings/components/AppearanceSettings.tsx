@@ -1,12 +1,11 @@
 import { Box, Select, Stack } from '@chakra-ui/react'
-import { languagesList } from 'constants/constants'
-import { UserSettings } from 'constants/types'
 import { useState } from 'react'
 import { useRecoilState } from 'recoil'
+import Label from 'settings/components/Label'
+import SettingsHeading from 'settings/components/SettingsHeading'
+import { languagesList } from 'settings/constants'
+import { UserSettings } from 'settings/types'
 import { userSettingsState } from 'store/atoms'
-
-import Label from '../Label'
-import SettingsHeading from '../SettingsHeading'
 
 function AppearanceSettings() {
     const [userSettings, setUserSettings] = useRecoilState(userSettingsState)

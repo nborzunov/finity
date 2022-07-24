@@ -1,6 +1,7 @@
 import { Box, Switch, Text } from '@chakra-ui/react'
-import { DialogMode } from 'components/Settings/TimerSettings/SchemaDetails'
-import Select, { SelectOption } from 'components/Settings/TimerSettings/Select'
+import Select from 'settings/components/Select'
+import { SelectOption } from 'settings/types'
+import { DialogMode } from 'shared/constants/constants'
 
 function CardWrapper({
     title,

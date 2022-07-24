@@ -1,6 +1,6 @@
 import { Box, Slider as ChakraSlider, SliderFilledTrack, SliderThumb, SliderTrack, Tooltip } from '@chakra-ui/react'
-import { Icons } from 'constants/icons'
 import { useState } from 'react'
+import { Icons } from 'shared/constants/icons'
 
 function Slider({ value, setValue }: { value: number; setValue: (value: number) => void }) {
     const [showTooltip, setShowTooltip] = useState(false)
