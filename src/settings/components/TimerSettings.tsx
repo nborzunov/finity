@@ -1,18 +1,12 @@
 import { Box, Button, Heading, Stack } from '@chakra-ui/react'
-import { SchemaType } from 'pomodoro/types'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import SchemaCard from 'settings/components/SchemaCard'
-import SchemaDetails from 'settings/components/SchemaDetails'
-import SettingsHeading from 'settings/components/SettingsHeading'
+import SettingsHeading from 'settings/components/partial/SettingsHeading'
+import SchemaCard from 'settings/components/schema/SchemaCard'
+import SchemaDetails from 'settings/components/schema/SchemaDetails'
 import useSchemaDetailsDialog from 'settings/hooks/useSchemaDetailsDialog'
+import { SchemaItem } from 'settings/types'
 import { DialogMode } from 'shared/constants/constants'
 import { schemasState, timerSchemaState } from 'store/atoms'
-
-export interface SchemaItem extends SchemaType {
-    id: string
-    title: string
-    default: boolean
-}
 
 function TimerSettings() {
     const [schemas] = useRecoilState(schemasState)

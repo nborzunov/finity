@@ -1,5 +1,5 @@
 import { Box, CircularProgress, CircularProgressLabel, Heading, Icon, IconButton, Text } from '@chakra-ui/react'
-import Stepper from 'pomodoro/components/Stepper'
+import Stepper from 'pomodoro/components/partial/Stepper'
 import useTimer from 'pomodoro/hooks/useTimer'
 import { useRecoilValue } from 'recoil'
 import { Icons } from 'shared/constants/icons'

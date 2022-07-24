@@ -2,7 +2,7 @@ import { Box, Button, HStack, Stack, Text } from '@chakra-ui/react'
 import { useResetRecoilState } from 'recoil'
 import AppearanceSettings from 'settings/components/AppearanceSettings'
 import NotificationSettings from 'settings/components/NotificationSettings'
-import SettingsHeading from 'settings/components/SettingsHeading'
+import SettingsHeading from 'settings/components/partial/SettingsHeading'
 import TimerSettings from 'settings/components/TimerSettings'
 import {
     schemaDetailsState,
@@ -52,8 +52,7 @@ function Settings() {
                 <Stack spacing="8" display="flex" alignItems="center">
                     <Box width="100%" maxWidth="300px">
                         <SettingsHeading>Additional</SettingsHeading>
-                        <Text>If you face with some issues with the app, please click this button</Text>
-                        {/* TODO: clear all atom states */}
+                        <Text>If you face with some issues in the app, please click this button</Text>
                         <Button onClick={clearState} mt="4">
                             Clear all cache
                         </Button>

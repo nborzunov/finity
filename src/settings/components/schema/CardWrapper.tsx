@@ -1,5 +1,5 @@
 import { Box, Switch, Text } from '@chakra-ui/react'
-import Select from 'settings/components/Select'
+import Select from 'settings/components/partial/Select'
 import { SelectOption } from 'settings/types'
 import { DialogMode } from 'shared/constants/constants'
 

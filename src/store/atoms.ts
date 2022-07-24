@@ -6,6 +6,8 @@ import { DialogMode } from 'shared/constants/constants'
 import { defaultSchemas, getBlankSchema } from 'shared/constants/defaultValues'
 import { localStorageEffect } from 'store/effects'
 
+// TODO: isolate atoms to their feature folders
+
 export const timerIsPausedState = atom<Boolean>({
     key: 'timerIsPausedState',
     default: true,

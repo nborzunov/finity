@@ -1,7 +1,7 @@
 import { Flex, Icon, IconButton } from '@chakra-ui/react'
-import { Icons } from 'constants/icons'
-import { mainButtonStylesGhost } from 'constants/styles'
 import { Link, useLocation } from 'react-router-dom'
+import { Icons } from 'shared/constants/icons'
+import { mainButtonStylesGhost } from 'shared/constants/styles'
 
 function Navigation() {
     const icons = [

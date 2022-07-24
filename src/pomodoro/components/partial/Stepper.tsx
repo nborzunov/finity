@@ -1,5 +1,5 @@
 import { Flex } from '@chakra-ui/react'
-import Step from 'pomodoro/components/Step'
+import Step from 'pomodoro/components/partial/Step'
 import { useEffect, useState } from 'react'
 
 function Stepper({ count, active }: { count: number; active: number }) {

@@ -1,9 +1,9 @@
 import { Box, Select, Stack, Switch } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
-import Label from 'settings/components/Label'
-import SettingsHeading from 'settings/components/SettingsHeading'
-import Slider from 'settings/components/Slider'
+import Label from 'settings/components/partial/Label'
+import SettingsHeading from 'settings/components/partial/SettingsHeading'
+import Slider from 'settings/components/partial/Slider'
 import { alarmsList } from 'settings/constants'
 import { userSettingsState } from 'store/atoms'
 

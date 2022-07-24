@@ -15,7 +15,7 @@ import {
 import { isEqual } from 'lodash'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
-import CardWrapper from 'settings/components/CardWrapper'
+import CardWrapper from 'settings/components/schema/CardWrapper'
 import { FieldLabels } from 'settings/constants'
 import { Field, Fields, SchemaItem } from 'settings/types'
 import { DialogMode } from 'shared/constants/constants'
@@ -243,7 +243,6 @@ function SchemaDetails() {
             <Modal isOpen={isOpen} onClose={cancel} onOverlayClick={cancel}>
                 <ModalOverlay bg="rgba(0, 0, 0, 0.2)" />
                 <ModalContent bg="gray.950" ref={ref}>
-                    {/* TODO: edit/create mode change title */}
                     <ModalHeader>
                         {mode === DialogMode.View && <Heading size="md">{`${schema.title} timer`}</Heading>}
                         {mode !== DialogMode.View && (
