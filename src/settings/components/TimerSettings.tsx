@@ -28,16 +28,18 @@ function TimerSettings() {
 
             <Stack spacing="3">
                 {schemas.map((schema, index) => (
-                    <Button
+                    <Box
                         key={index}
                         color="white"
-                        bgColor={selectedSchema.id !== schema.id ? 'brand.500' : 'brand.400'}
                         p="3"
                         borderRadius="full"
                         h="64px"
                         alignItems="center"
                         justifyContent="space-between"
                         display="flex"
+                        cursor="pointer"
+                        transition="0.15s"
+                        bgColor={selectedSchema.id !== schema.id ? 'brand.500' : 'brand.400'}
                         _hover={{
                             bgColor: selectedSchema.id !== schema.id ? 'brand.500' : 'brand.400',
                             opacity: 0.8,
@@ -51,7 +53,7 @@ function TimerSettings() {
                         <Box px="3" alignItems="center" justifyContent="space-between" display="flex" w="100%">
                             <SchemaCard schema={schema} />
                         </Box>
-                    </Button>
+                    </Box>
                 ))}
 
                 <Button

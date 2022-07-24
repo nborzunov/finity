@@ -1,14 +1,15 @@
-import { Box, CircularProgress, CircularProgressLabel, Heading, Icon, IconButton, Text } from '@chakra-ui/react'
+import { Box, CircularProgress, CircularProgressLabel, Heading, Text } from '@chakra-ui/react'
 import Stepper from 'pomodoro/components/partial/Stepper'
 import useTimer from 'pomodoro/hooks/useTimer'
 import { useRecoilValue } from 'recoil'
 import { Icons } from 'shared/constants/icons'
-import { boxShadowMedium, mainButtonStyles } from 'shared/constants/styles'
 import useTitle from 'shared/hooks/useTitle'
 import { timerSchemaState } from 'store/atoms'
 
+import RoundButton from './partial/RoundButtom'
+
 function Pomodoro() {
-    const { isPaused, schema, order, getPercentage, getFormattedTime, getSessionStatus, toggle } = useTimer()
+    const { isPaused, schema, order, getPercentage, getFormattedTime, getSessionStatus, toggle, stepBack, resetTimer } = useTimer()
     const selectedSchema = useRecoilValue(timerSchemaState)
 
     useTitle(isPaused ? 'Pomodoro timer' : `${getFormattedTime()} - ${getSessionStatus()}`)
@@ -31,21 +32,14 @@ function Pomodoro() {
             </Box>
 
             {/* TODO: buttons: reset timer and go back to prev */}
-            <IconButton
-                icon={<Icon as={!isPaused ? Icons.Pause : Icons.Play} />}
-                aria-label="pause"
-                backgroundColor="brand.500"
-                size="lg"
-                boxShadow={boxShadowMedium}
-                rounded="full"
-                m="4"
-                color="white"
-                fontSize="2xl"
-                w="16"
-                h="16"
-                {...mainButtonStyles}
-                onClick={toggle}
-            />
+
+            <Box display="flex" alignItems="center" justifyContent="center" m="4">
+                <RoundButton icon={Icons.Previous} title="Previous session" onClick={stepBack} />
+
+                <RoundButton icon={!isPaused ? Icons.Pause : Icons.Play} title={!isPaused ? 'Pause' : 'Play'} onClick={toggle} mainButton />
+
+                <RoundButton icon={Icons.Stop} title="Reset timer" onClick={resetTimer} />
+            </Box>
         </>
     )
 }

@@ -42,13 +42,13 @@ function useTimer() {
 
     useEffect(() => {
         if (remainingSeconds === -1) {
-            updateRemainingSecinds()
+            updateRemainingSeconds()
         }
 
         getTimer()
 
         if (timerSchemaChanged) {
-            reset()
+            resetTimer()
             setTimerSchemaChanged(false)
         }
         return () => {
@@ -56,7 +56,7 @@ function useTimer() {
         }
     }, [isPaused, timerSchemaChanged])
 
-    async function updateRemainingSecinds() {
+    async function updateRemainingSeconds() {
         const currentSession = await getCurrentHookValue<SessionType>(setCurrentSession)
         const duration = getSessionDuration(currentSession)
         setRemainingSeconds(duration)
@@ -123,9 +123,11 @@ function useTimer() {
     }
 
     function resetTimer() {
+        setIsPaused(true)
         resetCurrentSession()
         resetOrder()
         resetRemainingSeconds()
+        updateRemainingSeconds()
     }
 
     async function getNextSession(currentSession: string): Promise<[SessionType, boolean]> {
@@ -149,11 +151,11 @@ function useTimer() {
     function getSessionDuration(sessionType: SessionType): number {
         switch (sessionType) {
             case SessionType.Pomodoro:
-                return schema.pomodoroDuration * 60
+                return 5 || schema.pomodoroDuration * 60
             case SessionType.ShortBreak:
-                return schema.shortBreakDuration * 60
+                return 5 || schema.shortBreakDuration * 60
             case SessionType.LongBreak:
-                return schema.longBreakDuration * 60
+                return 5 || schema.longBreakDuration * 60
         }
     }
     function getFormattedTime(): string {
@@ -186,9 +188,23 @@ function useTimer() {
         audio.play()
     }
 
-    function reset() {
-        resetTimer()
+    async function stepBack() {
+        const order = await getCurrentHookValue<SessionOrderType>(setOrder)
+
+        if (order.pomodoro === 0) {
+            return
+        }
+
+        setOrder((val) => ({
+            ...val,
+            pomodoro: val.pomodoro - 1,
+            shortBreak: val.pomodoro - 1,
+        }))
+
+        setCurrentSession(SessionType.Pomodoro)
+        setRemainingSeconds(getSessionDuration(SessionType.Pomodoro))
     }
+
     return {
         isPaused,
         currentSession,
@@ -199,6 +215,8 @@ function useTimer() {
         toggle,
         getFormattedTime,
         getSessionStatus,
+        stepBack,
+        resetTimer,
     }
 }
 

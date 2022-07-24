@@ -1,7 +1,7 @@
-import { Box, Icon, IconButton, useDisclosure } from '@chakra-ui/react'
+import { Box, useDisclosure } from '@chakra-ui/react'
 import { useState } from 'react'
-import { IconType } from 'react-icons'
 import { useSetRecoilState } from 'recoil'
+import GhostIcon from 'settings/components/partial/GhostIcon'
 import useSchemaDetailsDialog from 'settings/hooks/useSchemaDetailsDialog'
 import { SchemaItem } from 'settings/types'
 import { DialogMode } from 'shared/constants/constants'
@@ -10,31 +10,6 @@ import ConfirmationDialog from 'shared/dialogs/ConfirmationDialog'
 import { formatTime } from 'shared/helpers/formatTime'
 import { ConfirmationDialogData } from 'shared/types'
 import { schemasState } from 'store/atoms'
-
-function GhostIcon({ icon, hoverBg, title, onClick }: { icon: IconType; hoverBg?: string; title: string; onClick: any }) {
-    return (
-        <IconButton
-            icon={<Icon as={icon} />}
-            aria-label="edit"
-            variant="ghost"
-            fontSize="17px"
-            borderRadius="xl"
-            title={title}
-            _hover={{
-                background: hoverBg,
-                color: 'rgba(255, 255, 255, 0.8)',
-            }}
-            _focus={{
-                background: hoverBg,
-            }}
-            onClick={onClick}
-        />
-    )
-}
-
-GhostIcon.defaultProps = {
-    hoverBg: 'brand.500',
-}
 
 function SchemaCard({ schema }: { schema: SchemaItem }) {
     const setSchemas = useSetRecoilState(schemasState)

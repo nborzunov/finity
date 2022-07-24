@@ -1,4 +1,5 @@
 import {
+    BsArrowCounterclockwise,
     BsCalendarDate,
     BsChevronDown,
     BsChevronUp,
@@ -7,6 +8,7 @@ import {
     BsFillPencilFill,
     BsFillPersonFill,
     BsFillPlayFill,
+    BsFillStopCircleFill,
     BsFillTrash2Fill,
     BsFillVolumeUpFill,
     BsGearFill,
@@ -26,4 +28,6 @@ export const Icons = {
     Down: BsChevronDown,
     Up: BsChevronUp,
     Volume: BsFillVolumeUpFill,
+    Previous: BsArrowCounterclockwise,
+    Stop: BsFillStopCircleFill,
 }
