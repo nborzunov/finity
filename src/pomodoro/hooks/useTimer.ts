@@ -151,11 +151,11 @@ function useTimer() {
     function getSessionDuration(sessionType: SessionType): number {
         switch (sessionType) {
             case SessionType.Pomodoro:
-                return 5 || schema.pomodoroDuration * 60
+                return schema.pomodoroDuration * 60
             case SessionType.ShortBreak:
-                return 5 || schema.shortBreakDuration * 60
+                return schema.shortBreakDuration * 60
             case SessionType.LongBreak:
-                return 5 || schema.longBreakDuration * 60
+                return schema.longBreakDuration * 60
         }
     }
     function getFormattedTime(): string {
@@ -192,6 +192,7 @@ function useTimer() {
         const order = await getCurrentHookValue<SessionOrderType>(setOrder)
 
         if (order.pomodoro === 0) {
+            resetTimer()
             return
         }
 
