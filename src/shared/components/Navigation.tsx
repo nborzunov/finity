@@ -11,7 +11,7 @@ function Navigation() {
             icon: Icons.Calendar,
         },
         {
-            id: '/pomodoro',
+            id: '/',
             label: 'Pomodoro',
             icon: Icons.Pomodoro,
         },

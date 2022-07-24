@@ -1,7 +1,7 @@
 import { Box } from '@chakra-ui/react'
 import { ChakraProvider, extendTheme } from '@chakra-ui/react'
 import Pomodoro from 'pomodoro/components/Pomodoro'
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { RecoilRoot } from 'recoil'
 import Settings from 'settings/components/Settings'
 import Navigation from 'shared/components/Navigation'
@@ -59,8 +59,7 @@ function App() {
                             overflowX="hidden"
                         >
                             <Routes>
-                                <Route element={<Navigate to="pomodoro" replace />} path="/" />
-                                <Route path="pomodoro" element={<Pomodoro />} />
+                                <Route path="/" element={<Pomodoro />} />
                                 <Route path="settings" element={<Settings />} />
                             </Routes>
                         </Box>
