@@ -51,7 +51,6 @@ function Settings() {
     }
 
     const isMobile = useMobile()
-    console.log(isMobile)
     return (
         <Box minWidth="340px" maxWidth="1200px" width="100%" mt="8">
             <HStack

@@ -84,15 +84,15 @@ function useTimer(): Timer {
     }
 
     async function close() {
-        const _timer: any = await getCurrentHookValue(setTimer)
-        console.log(_timer)
         clearInterval(timer)
         setTimer(null)
         setIsPaused(true)
     }
 
     const getTimer = useCallback(async () => {
-        if (timerSchemaChanged) {
+        const _timerSchemaChanged = await getCurrentHookValue(setTimerSchemaChanged)
+
+        if (_timerSchemaChanged) {
             resetTimer()
             setTimerSchemaChanged(false)
         }
