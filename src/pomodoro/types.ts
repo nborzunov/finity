@@ -19,7 +19,7 @@ export interface TimerState {
     schema: SchemaItem
     currentSession: SessionType
     order: SessionOrderType
-    remainingSeconds?: number
+    seconds?: number
 }
 
 export type SessionTypeUnion = `${SessionType}`

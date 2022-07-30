@@ -1,18 +1,16 @@
 import { Box, CircularProgress, CircularProgressLabel, Heading, Text } from '@chakra-ui/react'
+import RoundButton from 'pomodoro/components/partial/RoundButtom'
 import Stepper from 'pomodoro/components/partial/Stepper'
-import useTimer from 'pomodoro/hooks/useTimer'
+import { TimerContext } from 'pomodoro/hooks/useTimer'
+import { useContext } from 'react'
 import { useRecoilValue } from 'recoil'
 import { Icons } from 'shared/constants/icons'
-import useTitle from 'shared/hooks/useTitle'
 import { timerSchemaState } from 'store/atoms'
 
-import RoundButton from './partial/RoundButtom'
-
 function Pomodoro() {
-    const { isPaused, schema, order, getPercentage, getFormattedTime, getSessionStatus, toggle, stepBack, resetTimer } = useTimer()
+    const { isPaused, schema, order, getPercentage, getTime, getSession, toggle, stepBack, resetTimer } = useContext(TimerContext)
     const selectedSchema = useRecoilValue(timerSchemaState)
 
-    useTitle(isPaused ? 'Pomodoro timer' : `${getFormattedTime()} - ${getSessionStatus()}`)
     return (
         <>
             {/* localization */}
@@ -22,8 +20,8 @@ function Pomodoro() {
 
             <CircularProgress value={getPercentage()} size="240px" thickness="3px" color="brand.700" trackColor="gray.500" capIsRound>
                 <CircularProgressLabel color="white">
-                    <Text>{getFormattedTime()}</Text>
-                    <Text fontSize="lg">{getSessionStatus()}</Text>
+                    <Text>{getTime()}</Text>
+                    <Text fontSize="lg">{getSession()}</Text>
                 </CircularProgressLabel>
             </CircularProgress>
 

@@ -22,7 +22,7 @@ function TimerSettings() {
     const selectedSchema = useRecoilValue(timerSchemaState)
 
     return (
-        <Box w="300px">
+        <Box w="340px">
             <SchemaDetails />
             <SettingsHeading>Timer</SettingsHeading>
 

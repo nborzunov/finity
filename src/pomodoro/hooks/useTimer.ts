@@ -1,17 +1,19 @@
 import { SessionType } from 'pomodoro/constants'
 import { SessionOrderType, TimerState } from 'pomodoro/types'
-import { useCallback, useEffect, useState } from 'react'
+import { createContext, useCallback, useEffect, useState } from 'react'
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil'
 import { alarmsList } from 'settings/constants'
+import { SchemaItem } from 'settings/types'
 import { formatTime } from 'shared/helpers/formatTime'
 import { getCurrentHookValue } from 'shared/helpers/getCurrentHookValue'
+import useTitle from 'shared/hooks/useTitle'
 import {
     timerCurrentSessionState,
     timerIsPausedState,
     timerOrderState,
-    timerRemainingSecondsState,
     timerSchemaChangedState,
     timerSchemaState,
+    timerSecondsState,
     userSettingsState,
 } from 'store/atoms'
 
@@ -24,11 +26,27 @@ export function getTimerState(): TimerState | null {
     return null
 }
 
-function useTimer() {
+export const TimerContext = createContext<Timer>({} as Timer)
+
+interface Timer {
+    isPaused: boolean
+    currentSession: SessionType
+    order: SessionOrderType
+    schema: SchemaItem
+    seconds: number
+    getPercentage: () => number
+    toggle: () => void
+    getTime: () => string
+    getSession: () => string
+    stepBack: () => void
+    resetTimer: () => void
+}
+
+function useTimer(): Timer {
     const [isPaused, setIsPaused] = useRecoilState(timerIsPausedState)
     const [currentSession, setCurrentSession] = useRecoilState(timerCurrentSessionState)
     const [order, setOrder] = useRecoilState(timerOrderState)
-    const [remainingSeconds, setRemainingSeconds] = useRecoilState(timerRemainingSecondsState)
+    const [seconds, setRemainingSeconds] = useRecoilState(timerSecondsState)
     const [timerSchemaChanged, setTimerSchemaChanged] = useRecoilState(timerSchemaChangedState)
 
     const schema = useRecoilValue(timerSchemaState)
@@ -36,25 +54,28 @@ function useTimer() {
 
     const resetCurrentSession = useResetRecoilState(timerCurrentSessionState)
     const resetOrder = useResetRecoilState(timerOrderState)
-    const resetRemainingSeconds = useResetRecoilState(timerRemainingSecondsState)
+    const resetRemainingSeconds = useResetRecoilState(timerSecondsState)
 
     const [timer, setTimer] = useState<any>(null)
 
+    const setTitle = useTitle()
+
     useEffect(() => {
-        if (remainingSeconds === -1) {
+        return () => {
+            close()
+        }
+    }, [])
+    useEffect(() => {
+        if (seconds === -1) {
             updateRemainingSeconds()
         }
 
         getTimer()
-
-        if (timerSchemaChanged) {
-            resetTimer()
-            setTimerSchemaChanged(false)
-        }
-        return () => {
-            clearInterval(timer)
-        }
     }, [isPaused, timerSchemaChanged])
+
+    useEffect(() => {
+        setTitle(isPaused ? 'Pomodoro timer' : `${getTime()} - ${getSession()}`)
+    }, [seconds, isPaused])
 
     async function updateRemainingSeconds() {
         const currentSession = await getCurrentHookValue<SessionType>(setCurrentSession)
@@ -62,21 +83,36 @@ function useTimer() {
         setRemainingSeconds(duration)
     }
 
+    async function close() {
+        const _timer: any = await getCurrentHookValue(setTimer)
+        console.log(_timer)
+        clearInterval(timer)
+        setTimer(null)
+        setIsPaused(true)
+    }
+
     const getTimer = useCallback(async () => {
-        if (timer && isPaused) {
-            clearInterval(timer)
+        if (timerSchemaChanged) {
+            resetTimer()
+            setTimerSchemaChanged(false)
+        }
+
+        const _timer: any = await getCurrentHookValue(setTimer)
+
+        if (_timer && isPaused) {
+            clearInterval(_timer)
             setTimer(null)
-        } else if (!timer && !isPaused) {
+        } else if (!_timer && !isPaused) {
             setTimer(
                 setInterval(() => {
                     updateTimer()
                 }, 1000),
             )
         }
-    }, [timer, isPaused, remainingSeconds])
+    }, [timer, isPaused, seconds])
 
     function getPercentage(): number {
-        return (remainingSeconds / getSessionDuration(currentSession)) * 100
+        return (seconds / getSessionDuration(currentSession)) * 100
     }
 
     function toggle(): void {
@@ -90,11 +126,11 @@ function useTimer() {
 
         setRemainingSeconds((val) => val - 1)
 
-        let _remainingSeconds = await getCurrentHookValue<number>(setRemainingSeconds)
-        if (_remainingSeconds <= 0) {
+        let _seconds = await getCurrentHookValue<number>(setRemainingSeconds)
+        if (_seconds <= 0) {
             nextSession()
         }
-    }, [isPaused, remainingSeconds])
+    }, [isPaused, seconds])
 
     async function nextSession() {
         const currentSession = await getCurrentHookValue<SessionType>(setCurrentSession)
@@ -158,11 +194,11 @@ function useTimer() {
                 return schema.longBreakDuration * 60
         }
     }
-    function getFormattedTime(): string {
-        return formatTime(remainingSeconds, 'mm:ss')
+    function getTime(): string {
+        return formatTime(seconds, 'mm:ss')
     }
 
-    function getSessionStatus(): string {
+    function getSession(): string {
         switch (currentSession) {
             case SessionType.Pomodoro:
                 return 'Working'
@@ -211,11 +247,11 @@ function useTimer() {
         currentSession,
         order,
         schema,
-        remainingSeconds,
+        seconds,
         getPercentage,
         toggle,
-        getFormattedTime,
-        getSessionStatus,
+        getTime,
+        getSession,
         stepBack,
         resetTimer,
     }

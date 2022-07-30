@@ -1,26 +1,36 @@
 import { Box, Button, HStack, Stack, Text } from '@chakra-ui/react'
+import { ReactNode } from 'react'
 import { useResetRecoilState } from 'recoil'
 import AppearanceSettings from 'settings/components/AppearanceSettings'
 import NotificationSettings from 'settings/components/NotificationSettings'
 import SettingsHeading from 'settings/components/partial/SettingsHeading'
 import TimerSettings from 'settings/components/TimerSettings'
+import useMobile from 'shared/hooks/useMobile'
 import {
     schemaDetailsState,
     schemasState,
     timerCurrentSessionState,
     timerIsPausedState,
     timerOrderState,
-    timerRemainingSecondsState,
     timerSchemaChangedState,
     timerSchemaState,
+    timerSecondsState,
     userSettingsState,
 } from 'store/atoms'
 
+function SettingsContainer({ children }: { children: ReactNode }) {
+    const isMobile = useMobile()
+    return (
+        <Stack spacing={isMobile ? '4' : '8'} display="flex" alignItems="center" width="100%" maxWidth="340px">
+            {children}
+        </Stack>
+    )
+}
 function Settings() {
     const resetTimerIsPaused = useResetRecoilState(timerIsPausedState)
     const resetTimerOrder = useResetRecoilState(timerOrderState)
     const resetCurrentSession = useResetRecoilState(timerCurrentSessionState)
-    const resetTimerRemainingSeconds = useResetRecoilState(timerRemainingSecondsState)
+    const resetTimerRemainingSeconds = useResetRecoilState(timerSecondsState)
     const resetTimerSchema = useResetRecoilState(timerSchemaState)
     const resetTimerSchemaChanged = useResetRecoilState(timerSchemaChangedState)
     const resetSchemasList = useResetRecoilState(schemasState)
@@ -39,25 +49,33 @@ function Settings() {
         resetSchemaDetails()
         resetUserSettings()
     }
+
+    const isMobile = useMobile()
+    console.log(isMobile)
     return (
-        <Box width="100%" minWidth="300px" mt="8">
-            <HStack spacing="8" alignItems="start">
-                <Stack spacing="8" display="flex" alignItems="center">
+        <Box minWidth="340px" maxWidth="1200px" width="100%" mt="8">
+            <HStack
+                spacing={isMobile ? '2' : '8'}
+                alignItems={isMobile ? 'center' : 'start'}
+                justifyContent={isMobile ? 'center' : 'start'}
+                flexWrap="wrap"
+            >
+                <SettingsContainer>
                     <NotificationSettings />
                     <AppearanceSettings />
-                </Stack>
-                <Stack spacing="8" display="flex" alignItems="center">
+                </SettingsContainer>
+                <SettingsContainer>
                     <TimerSettings />
-                </Stack>
-                <Stack spacing="8" display="flex" alignItems="center">
-                    <Box width="100%" maxWidth="300px">
+                </SettingsContainer>
+                <SettingsContainer>
+                    <Box width="100%" maxWidth="340px">
                         <SettingsHeading>Additional</SettingsHeading>
                         <Text>If you face with some issues in the app, please click this button</Text>
                         <Button onClick={clearState} mt="4">
                             Clear all cache
                         </Button>
                     </Box>
-                </Stack>
+                </SettingsContainer>
             </HStack>
         </Box>
     )

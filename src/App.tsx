@@ -1,10 +1,6 @@
-import { Box } from '@chakra-ui/react'
 import { ChakraProvider, extendTheme } from '@chakra-ui/react'
-import Pomodoro from 'pomodoro/components/Pomodoro'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { RecoilRoot } from 'recoil'
-import Settings from 'settings/components/Settings'
-import Navigation from 'shared/components/Navigation'
+import AppRouting from 'Routing'
 
 const theme = extendTheme({
     config: {
@@ -40,33 +36,7 @@ function App() {
     return (
         <RecoilRoot>
             <ChakraProvider theme={theme}>
-                <BrowserRouter>
-                    <Box
-                        bg="gray.950"
-                        h="100vh"
-                        alignItems="center"
-                        justifyContent="space-between"
-                        display="flex"
-                        flexDirection="column"
-                        py="4"
-                    >
-                        <Box
-                            alignItems="center"
-                            display="flex"
-                            flexDirection="column"
-                            maxHeight="calc(100vh - 100px)"
-                            overflowY="auto"
-                            overflowX="hidden"
-                        >
-                            <Routes>
-                                <Route path="/" element={<Pomodoro />} />
-                                <Route path="settings" element={<Settings />} />
-                            </Routes>
-                        </Box>
-
-                        <Navigation />
-                    </Box>
-                </BrowserRouter>
+                <AppRouting />
             </ChakraProvider>
         </RecoilRoot>
     )

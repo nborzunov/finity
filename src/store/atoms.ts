@@ -8,7 +8,7 @@ import { localStorageEffect, loggerEffect } from 'store/effects'
 
 // TODO: isolate atoms to their feature folders
 
-export const timerIsPausedState = atom<Boolean>({
+export const timerIsPausedState = atom<boolean>({
     key: 'timerIsPausedState',
     default: true,
     effects: [loggerEffect()],
@@ -30,8 +30,8 @@ export const timerCurrentSessionState = atom<SessionType>({
     effects: [localStorageEffect('current_session'), loggerEffect()],
 })
 
-export const timerRemainingSecondsState = atom<number>({
-    key: 'timerRemainingSecondsState',
+export const timerSecondsState = atom<number>({
+    key: 'timerSecondsState',
     default: -1,
     effects: [localStorageEffect('remaining_seconds'), loggerEffect()],
 })

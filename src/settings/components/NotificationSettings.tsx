@@ -49,7 +49,7 @@ function NotificationSettings() {
     }, [form])
 
     return (
-        <Box width="100%" maxWidth="300px">
+        <Box width="100%" maxWidth="340px">
             <SettingsHeading>Notifications</SettingsHeading>
 
             <Stack spacing="4">
