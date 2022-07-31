@@ -1,4 +1,4 @@
-import { Box, Switch, Text } from '@chakra-ui/react'
+import { Box, Switch, Text, useColorModeValue } from '@chakra-ui/react'
 import Select from 'settings/components/partial/Select'
 import { SelectOption } from 'settings/types'
 import { DialogMode } from 'shared/constants/constants'
@@ -27,8 +27,7 @@ function CardWrapper({
         <>
             {mode === DialogMode.View && !isCheckbox && (
                 <Box
-                    color="white"
-                    bgColor="gray.900"
+                    bgColor={useColorModeValue('brand.200', 'gray.900')}
                     py="4"
                     px="6"
                     borderRadius="full"
@@ -36,7 +35,7 @@ function CardWrapper({
                     justifyContent="space-between"
                     display="flex"
                 >
-                    <Text color="gray.300" fontSize="18px">
+                    <Text color={useColorModeValue('gray.100', 'gray.300')} fontSize="18px">
                         {title}
                     </Text>
 
@@ -56,7 +55,7 @@ function CardWrapper({
                     justifyContent="space-between"
                     display="flex"
                 >
-                    <Text color="gray.300" fontSize="18px">
+                    <Text color={useColorModeValue('gray.900', 'gray.300')} fontSize="18px">
                         {title}
                     </Text>
 

@@ -1,4 +1,4 @@
-import { Box } from '@chakra-ui/react'
+import { Box, useColorModeValue } from '@chakra-ui/react'
 import Pomodoro from 'pomodoro/components/Pomodoro'
 import useTimer, { TimerContext } from 'pomodoro/hooks/useTimer'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
@@ -11,7 +11,7 @@ function AppRouting() {
         <BrowserRouter>
             <TimerContext.Provider value={timer}>
                 <Box
-                    bg="gray.950"
+                    bg={useColorModeValue('white', 'gray.950')}
                     h="100vh"
                     alignItems="center"
                     justifyContent="space-between"

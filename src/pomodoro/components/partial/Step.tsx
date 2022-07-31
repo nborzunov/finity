@@ -1,15 +1,16 @@
-import { Box } from '@chakra-ui/react'
+import { Box, useColorModeValue } from '@chakra-ui/react'
 
 function Step({ isActive, isLast, isFilled, count }: { isActive: boolean; isLast: boolean; isFilled: boolean; count: number }) {
     function getBackgroundColor() {
         if (isActive) {
-            return 'gray.950'
+            // TODO: bgColor
+            return useColorModeValue('white', 'gray.950')
         }
         if (isFilled) {
             return 'brand.500'
         }
         if (!isFilled) {
-            return 'gray.500'
+            return useColorModeValue('gray.400', 'gray.500')
         }
     }
 
@@ -28,7 +29,13 @@ function Step({ isActive, isLast, isFilled, count }: { isActive: boolean; isLast
                 <Box w="18px" h="18px" borderRadius="50%" backgroundColor={getBackgroundColor()} position="relative"></Box>
             </Box>
 
-            {!isLast && <Box w={-2 * count + 40 + 'px'} h="2px" backgroundColor={isFilled ? 'brand.500' : 'gray.500'}></Box>}
+            {!isLast && (
+                <Box
+                    w={-2 * count + 40 + 'px'}
+                    h="2px"
+                    backgroundColor={isFilled ? 'brand.500' : useColorModeValue('gray.400', 'gray.500')}
+                ></Box>
+            )}
         </>
     )
 }

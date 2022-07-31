@@ -1,4 +1,4 @@
-import { Box, Flex, Icon, Text, useDisclosure, useOutsideClick } from '@chakra-ui/react'
+import { Box, Flex, Icon, Text, useColorModeValue, useDisclosure, useOutsideClick } from '@chakra-ui/react'
 import { useRef } from 'react'
 import { SelectOption } from 'settings/types'
 import { Icons } from 'shared/constants/icons'
@@ -29,13 +29,13 @@ function Select({
             <Box
                 py="4"
                 px="6"
-                color="white"
+                color={useColorModeValue('gray.900', 'white')}
                 borderRadius="64px"
                 alignItems="center"
                 justifyContent="space-between"
                 display="flex"
                 position="relative"
-                bgColor="gray.900"
+                bgColor={useColorModeValue('brand.200', 'gray.900')}
                 borderTopRadius={isOpen ? '32px' : '64px'}
                 borderBottomRadius={isOpen ? 'none' : '64px'}
                 transition="border-radius 0.1s"
@@ -47,7 +47,7 @@ function Select({
                 ref={ref}
                 tabIndex={order}
             >
-                <Text color="gray.300" fontSize="18px">
+                <Text color={useColorModeValue('gray.100', 'gray.300')} fontSize="18px">
                     {title}
                 </Text>
 
@@ -56,7 +56,7 @@ function Select({
                         {value}
                     </Text>
 
-                    <Icon color="gray.100" mr="2" as={isOpen ? Icons.Up : Icons.Down} />
+                    <Icon color={useColorModeValue('white', 'gray.100')} mr="2" as={isOpen ? Icons.Up : Icons.Down} />
                 </Flex>
 
                 <Box
@@ -64,7 +64,7 @@ function Select({
                     maxHeight="191px"
                     width="100%"
                     overflowY="auto"
-                    bgColor="gray.900"
+                    bgColor={useColorModeValue('brand.200', 'gray.900')}
                     top="100%"
                     left="0"
                     py="2"
@@ -92,7 +92,7 @@ function Select({
                             _hover={{
                                 cursor: 'pointer',
                                 color: 'white',
-                                bgColor: 'brand.500',
+                                bgColor: useColorModeValue('brand.400', 'brand.500'),
                             }}
                             __css={{
                                 scrollSnapAlign: 'center',

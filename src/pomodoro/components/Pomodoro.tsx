@@ -1,4 +1,4 @@
-import { Box, CircularProgress, CircularProgressLabel, Heading, Text } from '@chakra-ui/react'
+import { Box, CircularProgress, CircularProgressLabel, Heading, Text, useColorModeValue } from '@chakra-ui/react'
 import RoundButton from 'pomodoro/components/partial/RoundButtom'
 import Stepper from 'pomodoro/components/partial/Stepper'
 import { TimerContext } from 'pomodoro/hooks/useTimer'
@@ -14,12 +14,19 @@ function Pomodoro() {
     return (
         <>
             {/* localization */}
-            <Heading color="white" textAlign="center" pt="4" pb="8" fontSize="xl">
+            <Heading color={useColorModeValue('gray.950', 'white')} textAlign="center" pt="4" pb="8" fontSize="xl">
                 {selectedSchema.title + ' timer'}
             </Heading>
 
-            <CircularProgress value={getPercentage()} size="240px" thickness="3px" color="brand.700" trackColor="gray.500" capIsRound>
-                <CircularProgressLabel color="white">
+            <CircularProgress
+                value={getPercentage()}
+                size="240px"
+                thickness="3px"
+                color={useColorModeValue('brand.500', 'brand.700')}
+                trackColor={useColorModeValue('gray.400', 'gray.500')}
+                capIsRound
+            >
+                <CircularProgressLabel color={useColorModeValue('gray.950', 'white')}>
                     <Text>{getTime()}</Text>
                     <Text fontSize="lg">{getSession()}</Text>
                 </CircularProgressLabel>

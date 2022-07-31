@@ -1,4 +1,4 @@
-import { Flex, Icon, IconButton } from '@chakra-ui/react'
+import { Flex, Icon, IconButton, useColorMode } from '@chakra-ui/react'
 import { Link, useLocation } from 'react-router-dom'
 import { Icons } from 'shared/constants/icons'
 import { mainButtonStylesGhost } from 'shared/constants/styles'
@@ -28,6 +28,9 @@ function Navigation() {
     ]
 
     const location = useLocation()
+    const { colorMode } = useColorMode()
+    const isDarkMode = colorMode === 'dark'
+
     return (
         <Flex justifyContent="space-around" w="100%" mx="8" maxW="320px">
             {icons.map((icon) => {
@@ -43,7 +46,7 @@ function Navigation() {
                             size="lg"
                             textShadow="1px 1px 10px #614ad3"
                             fontSize="2xl"
-                            {...mainButtonStylesGhost}
+                            {...mainButtonStylesGhost(isDarkMode)}
                         />
                     </Link>
                 )

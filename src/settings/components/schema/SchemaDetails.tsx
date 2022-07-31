@@ -1,5 +1,4 @@
 import {
-    Button,
     Heading,
     Input,
     Modal,
@@ -10,16 +9,17 @@ import {
     ModalHeader,
     ModalOverlay,
     Stack,
+    useColorModeValue,
     useDisclosure,
 } from '@chakra-ui/react'
 import { isEqual } from 'lodash'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
+import MainButton from 'settings/components/partial/MainButton'
 import CardWrapper from 'settings/components/schema/CardWrapper'
 import { FieldLabels } from 'settings/constants'
 import { Field, Fields, SchemaItem } from 'settings/types'
 import { DialogMode } from 'shared/constants/constants'
-import { boxShadowMedium, mainButtonStyles, mainButtonStylesGhost } from 'shared/constants/styles'
 import ConfirmationDialog from 'shared/dialogs/ConfirmationDialog'
 import { formatTime } from 'shared/helpers/formatTime'
 import { ConfirmationDialogData } from 'shared/types'
@@ -242,7 +242,7 @@ function SchemaDetails() {
         <>
             <Modal isOpen={isOpen} onClose={cancel} onOverlayClick={cancel}>
                 <ModalOverlay bg="rgba(0, 0, 0, 0.2)" />
-                <ModalContent bg="gray.950" ref={ref}>
+                <ModalContent bg={useColorModeValue('brand.50', 'gray.950')} ref={ref}>
                     <ModalHeader>
                         {mode === DialogMode.View && <Heading size="md">{`${schema.title} timer`}</Heading>}
                         {mode !== DialogMode.View && (
@@ -279,90 +279,22 @@ function SchemaDetails() {
                     <ModalFooter display="flex" justifyContent="space-between">
                         {mode === DialogMode.View && (
                             <>
-                                <Button
-                                    size="lg"
-                                    rounded="full"
-                                    mx="4"
-                                    color="white"
-                                    fontSize="lg"
-                                    px="8"
-                                    width="50%"
-                                    backgroundColor="transparent"
-                                    {...mainButtonStylesGhost}
-                                    onClick={() => choose()}
-                                >
+                                <MainButton isGhost onClick={choose}>
                                     Choose
-                                </Button>
-                                <Button
-                                    backgroundColor="brand.500"
-                                    size="lg"
-                                    rounded="full"
-                                    mx="4"
-                                    color="white"
-                                    fontSize="lg"
-                                    px="8"
-                                    width="50%"
-                                    boxShadow={boxShadowMedium}
-                                    {...mainButtonStyles}
-                                    onClick={() => edit()}
-                                    maxWidth="168px"
-                                >
-                                    Edit
-                                </Button>
+                                </MainButton>
+
+                                <MainButton onClick={edit}>Edit</MainButton>
                             </>
                         )}
                         {mode !== DialogMode.View && (
                             <>
-                                <Button
-                                    size="lg"
-                                    rounded="full"
-                                    mx="4"
-                                    color="white"
-                                    fontSize="lg"
-                                    px="8"
-                                    width="50%"
-                                    backgroundColor="transparent"
-                                    {...mainButtonStylesGhost}
-                                    onClick={() => cancel()}
-                                >
+                                <MainButton isGhost onClick={cancel}>
                                     Cancel
-                                </Button>
+                                </MainButton>
 
-                                {mode === DialogMode.Edit && (
-                                    <Button
-                                        backgroundColor="brand.500"
-                                        size="lg"
-                                        rounded="full"
-                                        mx="4"
-                                        color="white"
-                                        fontSize="lg"
-                                        px="8"
-                                        width="50%"
-                                        boxShadow={boxShadowMedium}
-                                        {...mainButtonStyles}
-                                        onClick={() => save()}
-                                    >
-                                        Save
-                                    </Button>
-                                )}
+                                {mode === DialogMode.Edit && <MainButton onClick={save}>Save</MainButton>}
 
-                                {mode === DialogMode.Create && (
-                                    <Button
-                                        backgroundColor="brand.500"
-                                        size="lg"
-                                        rounded="full"
-                                        mx="4"
-                                        color="white"
-                                        fontSize="lg"
-                                        px="8"
-                                        width="50%"
-                                        boxShadow={boxShadowMedium}
-                                        {...mainButtonStyles}
-                                        onClick={() => save()}
-                                    >
-                                        Create
-                                    </Button>
-                                )}
+                                {mode === DialogMode.Create && <MainButton onClick={save}>Create</MainButton>}
                             </>
                         )}
                     </ModalFooter>

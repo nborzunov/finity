@@ -11,14 +11,14 @@ export const mainButtonStyles = {
     },
 }
 
-export const mainButtonStylesGhost = {
+export const mainButtonStylesGhost = (isDarkMode: boolean) => ({
     transition: '0.2s',
     _hover: {
         opacity: '0.7',
-        backgroundColor: 'gray.950',
+        backgroundColor: isDarkMode ? 'gray.950' : 'transparent',
     },
     _active: {
-        backgroundColor: 'gray.950',
-        color: 'brand.500',
+        backgroundColor: isDarkMode ? 'gray.950' : 'brand.500',
+        color: isDarkMode ? 'brand.500' : 'white',
     },
-}
+})

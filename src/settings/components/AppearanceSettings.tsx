@@ -1,4 +1,4 @@
-import { Box, Select, Stack } from '@chakra-ui/react'
+import { Box, Select, Stack, useColorMode } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useRecoilState } from 'recoil'
 import Label from 'settings/components/partial/Label'
@@ -9,6 +9,7 @@ import { userSettingsState } from 'store/atoms'
 
 function AppearanceSettings() {
     const [userSettings, setUserSettings] = useRecoilState(userSettingsState)
+    const { setColorMode } = useColorMode()
     const [form, setForm] = useState<Pick<UserSettings, 'colorTheme' | 'language'>>({
         colorTheme: userSettings.colorTheme,
         language: userSettings.language,
@@ -23,10 +24,15 @@ function AppearanceSettings() {
 
             setUserSettings((val) => ({
                 ...val,
-                ...form,
+                [key]: value,
             }))
+
+            if (key === 'colorTheme') {
+                setColorMode(value)
+            }
         }
     }
+
     return (
         <Box width="100%" maxWidth="340px">
             <SettingsHeading>Appearance</SettingsHeading>
@@ -34,11 +40,9 @@ function AppearanceSettings() {
             <Stack spacing="4">
                 <Box py="0" display="flex" justifyContent="space-between" alignItems="center">
                     <Label>Color theme</Label>
-                    <Select value={form.language} onChange={(e) => setValue('language')(e.target.value)} w="120px">
+                    <Select value={form.colorTheme} onChange={(e) => setValue('colorTheme')(e.target.value)} w="120px">
                         <option value="dark">Dark</option>
-                        <option value="light" disabled>
-                            Light
-                        </option>
+                        <option value="light">Light</option>
                     </Select>
                 </Box>
 
