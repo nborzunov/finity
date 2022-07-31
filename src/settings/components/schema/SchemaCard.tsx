@@ -37,8 +37,10 @@ function SchemaCard({ schema }: { schema: SchemaItem }) {
             actionTitle: 'Delete',
             danger: true,
             additionalText: 'Are you sure you want to delete this schema?',
-            onConfirm: () => {
-                setSchemas((schemas) => schemas.filter((schema) => schema.id !== id))
+            onConfirm: (result) => {
+                if (result) {
+                    setSchemas((schemas) => schemas.filter((schema) => schema.id !== id))
+                }
             },
         })
         onOpenConfirm()

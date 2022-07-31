@@ -53,12 +53,12 @@ function Settings() {
 
     const isMobile = useMobile()
     return (
-        <Box minWidth="340px" maxWidth="1200px" width="100%" mt={isMobile ? '2' : '8'}>
+        <Box minWidth="300px" mt={isMobile ? '2' : '8'}>
             <HStack
                 spacing={isMobile ? '2' : '8'}
                 alignItems={isMobile ? 'center' : 'start'}
                 justifyContent={isMobile ? 'center' : 'start'}
-                flexWrap="wrap"
+                flexWrap={isMobile ? 'wrap' : 'nowrap'}
             >
                 <SettingsContainer>
                     <NotificationSettings />
@@ -68,7 +68,7 @@ function Settings() {
                     <TimerSettings />
                 </SettingsContainer>
                 <SettingsContainer>
-                    <Box width="100%" maxWidth="340px">
+                    <Box>
                         <SettingsHeading>Additional</SettingsHeading>
                         <Text>If you face with some issues in the app, please click this button</Text>
                         <Button onClick={clearState} mt="4">
