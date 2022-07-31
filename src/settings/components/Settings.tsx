@@ -20,6 +20,7 @@ import {
 
 function SettingsContainer({ children }: { children: ReactNode }) {
     const isMobile = useMobile()
+    console.log(isMobile)
     return (
         <Stack spacing={isMobile ? '4' : '8'} display="flex" alignItems="center" width="100%" maxWidth="340px">
             {children}
