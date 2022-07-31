@@ -32,7 +32,7 @@ function Navigation() {
     const isDarkMode = colorMode === 'dark'
 
     return (
-        <Flex justifyContent="space-around" w="100%" mx="8" maxW="320px">
+        <Flex justifyContent="space-around" w="100%" mx="8" mt="4" maxW="320px">
             {icons.map((icon) => {
                 return (
                     <Link to={icon.id} key={icon.id}>

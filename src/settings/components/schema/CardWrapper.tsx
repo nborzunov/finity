@@ -27,7 +27,7 @@ function CardWrapper({
         <>
             {mode === DialogMode.View && !isCheckbox && (
                 <Box
-                    bgColor={useColorModeValue('brand.200', 'gray.900')}
+                    bgColor={useColorModeValue('brand.400', 'gray.900')}
                     py="4"
                     px="6"
                     borderRadius="full"

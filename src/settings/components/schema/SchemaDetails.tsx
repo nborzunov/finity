@@ -242,7 +242,7 @@ function SchemaDetails() {
         <>
             <Modal isOpen={isOpen} onClose={cancel} onOverlayClick={cancel}>
                 <ModalOverlay bg="rgba(0, 0, 0, 0.2)" />
-                <ModalContent bg={useColorModeValue('brand.50', 'gray.950')} ref={ref}>
+                <ModalContent bg={useColorModeValue('brand.50', 'gray.950')} ref={ref} mt="8" mx="4">
                     <ModalHeader>
                         {mode === DialogMode.View && <Heading size="md">{`${schema.title} timer`}</Heading>}
                         {mode !== DialogMode.View && (

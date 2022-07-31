@@ -35,7 +35,7 @@ function Select({
                 justifyContent="space-between"
                 display="flex"
                 position="relative"
-                bgColor={useColorModeValue('brand.200', 'gray.900')}
+                bgColor={useColorModeValue('brand.400', 'gray.900')}
                 borderTopRadius={isOpen ? '32px' : '64px'}
                 borderBottomRadius={isOpen ? 'none' : '64px'}
                 transition="border-radius 0.1s"
@@ -64,7 +64,7 @@ function Select({
                     maxHeight="191px"
                     width="100%"
                     overflowY="auto"
-                    bgColor={useColorModeValue('brand.200', 'gray.900')}
+                    bgColor={useColorModeValue('brand.400', 'gray.900')}
                     top="100%"
                     left="0"
                     py="2"
@@ -92,7 +92,7 @@ function Select({
                             _hover={{
                                 cursor: 'pointer',
                                 color: 'white',
-                                bgColor: useColorModeValue('brand.400', 'brand.500'),
+                                bgColor: useColorModeValue('brand.200', 'brand.500'),
                             }}
                             __css={{
                                 scrollSnapAlign: 'center',
