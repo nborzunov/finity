@@ -20,9 +20,9 @@ import {
 
 function SettingsContainer({ children }: { children: ReactNode }) {
     const isMobile = useMobile()
-    console.log(isMobile)
+
     return (
-        <Stack spacing={isMobile ? '4' : '8'} display="flex" alignItems="center" width="100%" maxWidth="340px">
+        <Stack spacing={isMobile ? '4' : '8'} display="flex" alignItems="center" width="100%" maxWidth="min(340px, 100vw)">
             {children}
         </Stack>
     )
@@ -53,7 +53,7 @@ function Settings() {
 
     const isMobile = useMobile()
     return (
-        <Box minWidth="340px" maxWidth="1200px" width="100%" mt="8">
+        <Box minWidth="340px" maxWidth="1200px" width="100%" mt={isMobile ? '2' : '8'}>
             <HStack
                 spacing={isMobile ? '2' : '8'}
                 alignItems={isMobile ? 'center' : 'start'}
