@@ -38,7 +38,7 @@ interface Timer {
     toggle: () => void
     getTime: () => string
     getSession: () => string
-    stepBack: () => void
+    skip: () => void
     resetTimer: () => void
 }
 
@@ -170,9 +170,9 @@ function useTimer(): Timer {
         const order = await getCurrentHookValue<SessionOrderType>(setOrder)
 
         if (currentSession === 'pomodoro') {
-            if (order.pomodoro < schema.pomodorosGoal - 1) {
+            if (order.pomodoro < schema.pomodorosGoal) {
                 return [SessionType.ShortBreak, false]
-            } else if (order.pomodoro === schema.longBreakDelay - 1) {
+            } else if (order.pomodoro === schema.longBreakDelay) {
                 return [SessionType.LongBreak, false]
             } else {
                 return [SessionType.Pomodoro, true]
@@ -217,29 +217,35 @@ function useTimer(): Timer {
         if (!alarm) {
             return
         }
+
         const audio = new Audio(alarm.url)
-
         audio.volume = userSettings.volume
-
         audio.play()
     }
 
-    async function stepBack() {
+    async function skip(): Promise<void> {
         const order = await getCurrentHookValue<SessionOrderType>(setOrder)
 
-        if (order.pomodoro === 0) {
+        if (order.pomodoro === schema.pomodorosGoal) {
             resetTimer()
             return
         }
 
+        const currentSession = await getCurrentHookValue<SessionType>(setCurrentSession)
+
         setOrder((val) => ({
             ...val,
-            pomodoro: val.pomodoro - 1,
-            shortBreak: val.pomodoro - 1,
+            [currentSession]: val[currentSession] + 1,
         }))
 
-        setCurrentSession(SessionType.Pomodoro)
-        setRemainingSeconds(getSessionDuration(SessionType.Pomodoro))
+        const [nextSession] = await getNextSession(currentSession)
+
+        setCurrentSession(nextSession)
+        setRemainingSeconds(getSessionDuration(nextSession))
+
+        if (!schema.autoStartPomodoros) {
+            setIsPaused(true)
+        }
     }
 
     return {
@@ -252,7 +258,7 @@ function useTimer(): Timer {
         toggle,
         getTime,
         getSession,
-        stepBack,
+        skip,
         resetTimer,
     }
 }
