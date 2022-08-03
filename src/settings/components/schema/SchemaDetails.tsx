@@ -17,7 +17,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import MainButton from 'settings/components/partial/MainButton'
 import CardWrapper from 'settings/components/schema/CardWrapper'
-import { FieldLabels } from 'settings/constants'
+import { FieldLabels, SchemaItemFields } from 'settings/constants'
 import { Field, Fields, SchemaItem } from 'settings/types'
 import { DialogMode } from 'shared/constants/constants'
 import ConfirmationDialog from 'shared/dialogs/ConfirmationDialog'
@@ -65,7 +65,7 @@ function SchemaDetails() {
                     if (result) {
                         if (schemaToEdit) {
                             setSchemas((schemas) => schemas.map((schema) => (schema.title === schemaToEdit.title ? schemaToEdit : schema)))
-                            choose()
+                            choose(checkRequiredFieldsChanged())
                         }
                         onClose(true)
                         return
@@ -121,12 +121,30 @@ function SchemaDetails() {
         onOpenConfirm()
     }
 
-    function choose() {
+    function choose(dontReset: boolean = false) {
         if (schemaToEdit) {
             setSelectedSchema(schemaToEdit)
-            setTimerSchemaChanged(true)
+            if (!dontReset) {
+                setTimerSchemaChanged(true)
+            }
         }
         cancel()
+    }
+
+    function checkRequiredFieldsChanged() {
+        if (!schemaToEdit || !initialSchema) {
+            return
+        }
+        const requiredFIelds = Object.values(SchemaItemFields).filter(
+            (field) => field !== SchemaItemFields.AutoStartPomodoros && field !== SchemaItemFields.AutoStartBreaks,
+        ) as Fields[]
+
+        for (let key of requiredFIelds) {
+            if (schemaToEdit[key] !== initialSchema[key]) {
+                return false
+            }
+        }
+        return true
     }
 
     useEffect(() => {
@@ -145,28 +163,28 @@ function SchemaDetails() {
 
     function getOptions(type: string) {
         switch (type) {
-            case 'pomodoroDuration':
+            case SchemaItemFields.PomodoroDuration:
                 return getInterval(5, 120).map((interval) => ({
                     label: formatOptionValue(type, interval),
                     value: interval,
                 }))
-            case 'shortBreakDuration':
+            case SchemaItemFields.ShortBreakDuration:
                 return getInterval(5, 30).map((interval) => ({
                     label: formatOptionValue(type, interval),
                     value: interval,
                 }))
-            case 'longBreakDuration':
+            case SchemaItemFields.LongBreakDuration:
                 return getInterval(5, 60).map((interval) => ({
                     label: formatOptionValue(type, interval),
                     value: interval,
                 }))
 
-            case 'pomodorosGoal':
+            case SchemaItemFields.PomodorosGoal:
                 return getInterval(1, 12).map((interval) => ({
                     label: formatOptionValue(type, interval),
                     value: interval,
                 }))
-            case 'longBreakDelay':
+            case SchemaItemFields.LongBreakDelay:
                 return getInterval(1, (schemaToEdit as SchemaItem).pomodorosGoal).map((interval) => ({
                     label: formatOptionValue(type, interval),
                     value: interval,
@@ -206,15 +224,7 @@ function SchemaDetails() {
     )
 
     function buildFields(): Field[] {
-        const keys: Fields[] = [
-            'pomodoroDuration',
-            'shortBreakDuration',
-            'longBreakDuration',
-            'pomodorosGoal',
-            'longBreakDelay',
-            'autoStartPomodoros',
-            'autoStartBreaks',
-        ]
+        const keys = Object.values(SchemaItemFields) as Fields[]
 
         return keys.map((key, index) => {
             let field: Field = {
@@ -222,7 +232,7 @@ function SchemaDetails() {
                 label: FieldLabels[key],
             }
 
-            if (key === 'autoStartPomodoros' || key === 'autoStartBreaks') {
+            if (key === SchemaItemFields.AutoStartPomodoros || key === SchemaItemFields.AutoStartBreaks) {
                 field.isCheckbox = true
             } else {
                 field.order = index + 1

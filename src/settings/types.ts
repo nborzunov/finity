@@ -1,16 +1,17 @@
 import { SchemaType } from 'pomodoro/types'
-import { FieldLabels } from 'settings/constants'
+import { FieldLabels, SchemaItemFields } from 'settings/constants'
 import { DialogMode } from 'shared/constants/constants'
 import { DialogData } from 'shared/types'
 
 export type Fields =
-    | 'pomodoroDuration'
-    | 'shortBreakDuration'
-    | 'longBreakDuration'
-    | 'pomodorosGoal'
-    | 'longBreakDelay'
-    | 'autoStartPomodoros'
-    | 'autoStartBreaks'
+    | SchemaItemFields.Title
+    | SchemaItemFields.PomodoroDuration
+    | SchemaItemFields.ShortBreakDuration
+    | SchemaItemFields.LongBreakDuration
+    | SchemaItemFields.PomodorosGoal
+    | SchemaItemFields.LongBreakDelay
+    | SchemaItemFields.AutoStartPomodoros
+    | SchemaItemFields.AutoStartBreaks
 
 export interface Field {
     key: Fields

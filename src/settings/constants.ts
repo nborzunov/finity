@@ -3,7 +3,19 @@ import bell_2 from '../../assets/sounds/bell_2.ogg'
 import ding from '../../assets/sounds/ding.ogg'
 import knock from '../../assets/sounds/knock.ogg'
 
+export enum SchemaItemFields {
+    Title = 'title',
+    PomodoroDuration = 'pomodoroDuration',
+    ShortBreakDuration = 'shortBreakDuration',
+    LongBreakDuration = 'longBreakDuration',
+    PomodorosGoal = 'pomodorosGoal',
+    LongBreakDelay = 'longBreakDelay',
+    AutoStartPomodoros = 'autoStartPomodoros',
+    AutoStartBreaks = 'autoStartBreaks',
+}
+
 export enum FieldLabels {
+    title = 'Title',
     pomodoroDuration = 'Focus time',
     shortBreakDuration = 'Short break',
     longBreakDuration = 'Long break',
